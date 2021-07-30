@@ -7,11 +7,11 @@
 
 import UIKit
 //새 계정을 만드는 컨트롤러
-class RegistarViewController: UIViewController {
+class ResisterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .link
         // Do any additional setup after loading the view.
     }
     
