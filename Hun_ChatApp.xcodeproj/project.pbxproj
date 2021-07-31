@@ -13,6 +13,7 @@
 		400E73DE26B4AF7900533321 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73DD26B4AF7900533321 /* VideoPlayerViewController.swift */; };
 		400E73E026B4AFAF00533321 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73DF26B4AFAF00533321 /* NewConversationViewController.swift */; };
 		400E73E226B4AFC300533321 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73E126B4AFC300533321 /* ProfileViewController.swift */; };
+		400E73E526B4CB0D00533321 /* FrameExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73E426B4CB0D00533321 /* FrameExtensions.swift */; };
 		405559CF26B4AA2500C037C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559CE26B4AA2500C037C7 /* AppDelegate.swift */; };
 		405559D126B4AA2500C037C7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559D026B4AA2500C037C7 /* SceneDelegate.swift */; };
 		405559D326B4AA2500C037C7 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559D226B4AA2500C037C7 /* ConversationsViewController.swift */; };
@@ -28,6 +29,7 @@
 		400E73DD26B4AF7900533321 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		400E73DF26B4AFAF00533321 /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		400E73E126B4AFC300533321 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		400E73E426B4CB0D00533321 /* FrameExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtensions.swift; sourceTree = "<group>"; };
 		405559CB26B4AA2500C037C7 /* Hun_ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hun_ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		405559CE26B4AA2500C037C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		405559D026B4AA2500C037C7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			children = (
 				405559CE26B4AA2500C037C7 /* AppDelegate.swift */,
 				405559D026B4AA2500C037C7 /* SceneDelegate.swift */,
+				400E73E426B4CB0D00533321 /* FrameExtensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				400E73E026B4AFAF00533321 /* NewConversationViewController.swift in Sources */,
 				405559D326B4AA2500C037C7 /* ConversationsViewController.swift in Sources */,
 				400E73DE26B4AF7900533321 /* VideoPlayerViewController.swift in Sources */,
+				400E73E526B4CB0D00533321 /* FrameExtensions.swift in Sources */,
 				405559CF26B4AA2500C037C7 /* AppDelegate.swift in Sources */,
 				400E73E226B4AFC300533321 /* ProfileViewController.swift in Sources */,
 				405559D126B4AA2500C037C7 /* SceneDelegate.swift in Sources */,
