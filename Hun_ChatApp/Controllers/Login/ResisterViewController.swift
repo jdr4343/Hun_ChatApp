@@ -101,7 +101,7 @@ class ResisterViewController: UIViewController {
     //상단에 로고 이미지 삽입
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "logo")
+        imageView.image = UIImage(named: "profile")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -135,7 +135,22 @@ class ResisterViewController: UIViewController {
         scrollView.addSubview(passwordTextFiled)
         scrollView.addSubview(registerButton)
         
+        //Register의 프로필을 클릭하면 아래의 gesture 코드와 상호작용을 활성화
+        imageView.isUserInteractionEnabled = true
+        scrollView.isUserInteractionEnabled = true
+        
+        //사용자가 프로필 사진을 탭하고 프로필를 변경할수 있도록 addGestureRecognizer을 추가하여 제스처를 추가하겠습니다.
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapChangeProfilePic))
+        gesture.numberOfTouchesRequired = 1
+        gesture.numberOfTapsRequired = 1
+        imageView.addGestureRecognizer(gesture)
+
     }
+    @objc private func didTapChangeProfilePic() {
+           print("change Pic called")
+    }
+    
+    
     //상위, 하위 LayoutSubview를 재정의 하고 뷰를 호출 / 이미지 뷰를 위한 프레임을 중앙의 정사각형으로 구현 하겠습니다
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -187,10 +202,15 @@ class ResisterViewController: UIViewController {
     @objc private func registerButtonTapped() {
         emailTextFiled.resignFirstResponder()
         passwordTextFiled.resignFirstResponder()
-        
-        //두 필드에 텍스트가 있는지 확인하고 텍스트가 비어있지 않은지, 암호가 6자 이상인지 확인하는 유효성 검사를 하겠습니다.
-        guard let email = emailTextFiled.text, let password = passwordTextFiled.text,
-              !email.isEmpty, !password.isEmpty, password.count >= 6 else {
+        firstNameField.resignFirstResponder()
+        lastNameField.resignFirstResponder()
+        //두 필드에 텍스트가 있는지 확인하고 텍스트가 비어있지 않은지, 암호가 6자 이상인지, 성과 이름이 입력되었는지 확인하는 유효성 검사를 하겠습니다.
+        guard let firstName = firstNameField.text,
+              let lastName = lastNameField.text,
+              let email = emailTextFiled.text,
+              let password = passwordTextFiled.text,
+              !email.isEmpty, !firstName.isEmpty, !lastName.isEmpty, !password.isEmpty,
+              password.count >= 6 else {
             //하나라도 올바르지 않은 경우 되돌아가고 로그인을 시도하기 전에 모든 정보를 입력해야한다고 사용자에게 알리겠습니다.
             alertUserLoginError()
             return
@@ -203,7 +223,7 @@ class ResisterViewController: UIViewController {
     func alertUserLoginError() {
         //경고 메시지를 추가하고 사용자가 취소 할수 있게 구현 하겠습니다.
         let alert = UIAlertController(title: "Woops",
-                                      message: "please enter all information to log in",
+                                      message: "please enter all information to create a new account",
                                       preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Dismiss",
