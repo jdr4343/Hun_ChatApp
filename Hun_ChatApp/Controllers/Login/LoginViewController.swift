@@ -132,6 +132,11 @@ class LoginViewController: UIViewController {
     
     //사용자가 버튼을 탭하거나 비밀번호를 입력한후 리턴을 누른후 실제로 로그인을 시도하기전에 모든것을 검증하고 로그인을 시도하기 위해 호출되는 함수를 만들겠습니다.
     @objc private func loginButtonTapped() {
+        //로그인 버튼을 누르면 키보드가 제거 되도록 구현
+        emailTextFiled.resignFirstResponder()
+        passwordTextFiled.resignFirstResponder()
+        
+        
         //두 필드에 텍스트가 있는지 확인하고 텍스트가 비어있지 않은지, 암호가 6자 이상인지 확인하는 유효성 검사를 하겠습니다.
         guard let email = emailTextFiled.text, let password = passwordTextFiled.text,
               !email.isEmpty, !password.isEmpty, password.count >= 6 else {
