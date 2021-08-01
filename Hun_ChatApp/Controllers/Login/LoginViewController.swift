@@ -73,7 +73,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Log in"
-//사용자가 등록을 허용하는 버튼 구현 /ResisterViewController로 넘어가게 됨
+//사용자가 Resister을 허용하는 버튼 구현 /ResisterViewController로 넘어가게 됨
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register",
                                                             style: .done,
                                                             target: self,

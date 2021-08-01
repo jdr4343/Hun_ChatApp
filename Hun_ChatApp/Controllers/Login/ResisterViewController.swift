@@ -82,12 +82,6 @@ class ResisterViewController: UIViewController {
 
     
     
-    
-    
-    
-    
-    
-    
     private let registerButton: UIButton = {
         let button = UIButton()
         button.setTitle("Resister", for: .normal)
@@ -121,6 +115,8 @@ class ResisterViewController: UIViewController {
         
         //loginButton 연결 대상 추가 / 사용자가 탭을 하면 로그인 기능 호출 / 사용자가 비밀번호 필드에서 리턴을 누르면 자동으로 로그인 기능 호출 /필드가 delgate를 호출 할수 있도록 아래에 extention(LoginViewController확장자)를 생성하여 구현하겠습니다
       registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        firstNameField.delegate = self
+        lastNameField.delegate = self
         emailTextFiled.delegate = self
         passwordTextFiled.delegate = self
         
@@ -238,17 +234,21 @@ class ResisterViewController: UIViewController {
 //Controller를 작성하고 UITextFieldDelegate를 준수하므로 확장은 코드를 분리하는 정말 좋은방법 입니다. 직접 위의 LoginViewController class 코드에 delegate를 추가 할수 있지만 그러면 모든 코드를 같은 블록에 넣어야하니 많이 지저분해집니다.
 extension ResisterViewController: UITextFieldDelegate {
     
-    //이 함수는 사용자가 계속 버튼이든 이동 버튼이든 반환 키를 눌렀을때 호출됩니다.
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //textField == emailTextFiled 경우 passwordTextFiled에 포커스를 맞추지 않기를 원하므로 textField가 첫번쨰 응답자가 되고 그렇지 않고
-        //textField == emailTextFiled인 경우 로그인 기능을 호출하려고 합니다.
-        if textField == emailTextFiled {
+        if textField == firstNameField {
+            lastNameField.becomeFirstResponder()
+        }
+        else if textField == lastNameField {
+            emailTextFiled.becomeFirstResponder()
+        }
+        else if textField == emailTextFiled {
             passwordTextFiled.becomeFirstResponder()
-            //textField가 첫번쨰 응답자가 되고 그렇지 않으면 텍스트 필드가 이미 비밀번호 필드인 경우 로그인 기능을 사용자가 그런식으로 호출하려고 합니다 계속하기 위해 명시적으로 로그인 버튼을 누를 필요가 없을므로
         }
         else if textField == passwordTextFiled {
-          registerButtonTapped()
+            registerButtonTapped()
         }
+        
         return true
     }
 }
