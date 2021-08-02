@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
 //로그인 뷰 컨트롤러
 class LoginViewController: UIViewController {
 
