@@ -6,6 +6,7 @@
 //  기본적으로 이메일과 비밀번호를 사용하여 사용자를 만드는 것이지만 여기 등록되어 있는 양식에는 이름 성 도 포함되어 있습니다. 프로필이 사진 필드 이므로 이 정보의 이름과 이미지를 업로드 한 곳마다 데이터베이스에 보관하고 계정은 이메일과 비밀번호로 식별하므로 이 앱에서는 간단히 이메일과 비밀번호 부분을 살펴본 다음 데이터 베이스에 대해 자세히 살펴 보겠습니다.데이터 베이스가 훨씬 더 복잡하기 때문입니다. 스키마 및 기타 사항을 설정하는 방법을 정말 잘 이해하는것이 중요합니다.
 
 import UIKit
+import Firebase
 //새 계정을 만드는 컨트롤러
 class RegisterViewController: UIViewController {
     //LoginViewController에서 작성한 내용을 RegisterViewController에 복사
@@ -76,7 +77,6 @@ class RegisterViewController: UIViewController {
         filed.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         filed.leftViewMode = .always
         filed.backgroundColor = .white
-        filed.isSecureTextEntry = true // 텍스트가 보이지 않기위해 보안 텍스트 항목 지정
         return filed
     }()
 
@@ -221,7 +221,17 @@ class RegisterViewController: UIViewController {
             return
         }
         
-        //firebase login
+        //파이어베이스를 여기에서 구축하겠습니다. / 이메일과 비밀번호를 사용하여 계정을 만들수 있도록 코드를 선언하여 주겠습니다.
+        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            //오류가 발생하지 않았는지 확인하기 위해 가드문을 추가 하겠습니다. 오류가 발생하면 프린트를 출력 할것입니다.
+            guard let result = authResult, error == nil else {
+                print("Error cureating User")
+                return
+            }
+            //생성된 사용자이고 이경우에는 사용자를 인쇄문을 출력 하겠습니다.
+            let user = result.user
+            print("Created User: \(user)")
+        }
     }
     
     
