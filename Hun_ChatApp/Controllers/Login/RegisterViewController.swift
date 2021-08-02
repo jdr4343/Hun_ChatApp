@@ -7,8 +7,8 @@
 
 import UIKit
 //새 계정을 만드는 컨트롤러
-class ResisterViewController: UIViewController {
-    //LoginViewController에서 작성한 내용을 ResisterViewController에 복사
+class RegisterViewController: UIViewController {
+    //LoginViewController에서 작성한 내용을 RegisterViewController에 복사
     
     //사용자 인터페이스 요소 추가 / 스크롤 뷰 / 이메일,비밀번호를 적을 두개의 텍스트 필드 / 로그인 버튼
     private let scrollView: UIScrollView = {
@@ -84,7 +84,7 @@ class ResisterViewController: UIViewController {
     
     private let registerButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Resister", for: .normal)
+        button.setTitle("Register", for: .normal)
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 12
         button.layer.masksToBounds = true //두개의 경계를 마스킹
@@ -97,6 +97,11 @@ class ResisterViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "profile")
         imageView.contentMode = .scaleAspectFit
+        //선택한 이미지가 둥글도록 설정
+        imageView.layer.masksToBounds = true
+        //이미지가 멋있게 보이도록 테두리 설정
+        imageView.layer.borderWidth = 4
+        imageView.layer.borderColor = UIColor.lightGray.cgColor
         return imageView
     }()
     
@@ -107,11 +112,11 @@ class ResisterViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Log in"
-        //사용자가 등록을 허용하는 버튼 구현 /ResisterViewController로 넘어가게 됨
+        //사용자가 등록을 허용하는 버튼 구현 /RegisterViewController로 넘어가게 됨
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register",
                                                             style: .done,
                                                             target: self,
-                                                            action: #selector(didTapResister))
+                                                            action: #selector(didTapRegister))
         
         //loginButton 연결 대상 추가 / 사용자가 탭을 하면 로그인 기능 호출 / 사용자가 비밀번호 필드에서 리턴을 누르면 자동으로 로그인 기능 호출 /필드가 delgate를 호출 할수 있도록 아래에 extention(LoginViewController확장자)를 생성하여 구현하겠습니다
       registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
@@ -137,13 +142,14 @@ class ResisterViewController: UIViewController {
         
         //사용자가 프로필 사진을 탭하고 프로필를 변경할수 있도록 addGestureRecognizer을 추가하여 제스처를 추가하겠습니다.
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapChangeProfilePic))
-        gesture.numberOfTouchesRequired = 1
-        gesture.numberOfTapsRequired = 1
+//        gesture.numberOfTouchesRequired = 1
+//        gesture.numberOfTapsRequired = 1
         imageView.addGestureRecognizer(gesture)
 
     }
     @objc private func didTapChangeProfilePic() {
-           print("change Pic called")
+           //프로필 탭 액션 / 인포에서 카메라, 사진 권한 허용 /아래에 확장자 설정
+        presentPhotoActionSheet()
     }
     
     
@@ -156,6 +162,9 @@ class ResisterViewController: UIViewController {
                                  y: 50,
                                  width: size,
                                  height: size)
+        //선택된 이미지 원으로 설정
+        imageView.layer.cornerRadius = imageView.width/2.0
+        
         //도우미 기능 추가를 해서 뷰 프레임 크기를 수정할 필요가 없도록 하겠습니다.
         //이렇게 몇가지 도우미 기능을 추가 해놓으면 코드도 깔끔해지고 이미지를 수정하기 편해집니다
         firstNameField.frame = CGRect(x: 30,
@@ -178,17 +187,17 @@ class ResisterViewController: UIViewController {
                                          width: scrollView.width-60,
                                          height: 52)
         
-      registerButton.frame = CGRect(x: 30,
-                                   y: passwordTextFiled.bottom+10,
-                                   width: scrollView.width-60,
-                                   height: 52)
+        registerButton.frame = CGRect(x: 30,
+                                      y: passwordTextFiled.bottom+10,
+                                      width: scrollView.width-60,
+                                      height: 52)
     }
     
     
     
-    @objc private func didTapResister() {
-        //private: 클래스로 부터 private임을 의미하는함수 / 본질적으로 사용자가 버튼을 탭하면 ResisterViewController 화면으로 전환되도록 할겁니다 vc가 ResiseterViewController 라고 정의하고 pushViewController로 vc를 호출 할것입니다.
-        let vc = ResisterViewController()
+    @objc private func didTapRegister() {
+        //private: 클래스로 부터 private임을 의미하는함수 / 본질적으로 사용자가 버튼을 탭하면 RegisterViewController 화면으로 전환되도록 할겁니다 vc가 ResiseterViewController 라고 정의하고 pushViewController로 vc를 호출 할것입니다.
+        let vc = RegisterViewController()
         vc.title = "Create Account"
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -232,7 +241,7 @@ class ResisterViewController: UIViewController {
     }
 
 //Controller를 작성하고 UITextFieldDelegate를 준수하므로 확장은 코드를 분리하는 정말 좋은방법 입니다. 직접 위의 LoginViewController class 코드에 delegate를 추가 할수 있지만 그러면 모든 코드를 같은 블록에 넣어야하니 많이 지저분해집니다.
-extension ResisterViewController: UITextFieldDelegate {
+extension RegisterViewController: UITextFieldDelegate {
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -253,3 +262,59 @@ extension ResisterViewController: UITextFieldDelegate {
     }
 }
 
+// 사진과 Delegate를 선택하는 것에 관련 코드를 확장자에 구성하여 정리 하겠습니다.
+//사용자가 사진을 찍거나 카메라 롤에서 사진을 선택한 결과를 얻을 수 있도록 하는 RegisterViewControllerDelegate를 상속 시켜줍니다.
+extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    //사진찍기 / 사진선택 액션 시트 추가
+    func presentPhotoActionSheet() {
+        let actionSheet = UIAlertController(title: "Profile Picture",
+                                            message: "How would you like to select a picture?",
+                                            preferredStyle: .actionSheet)
+        // 버튼 추가
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] _ in
+            self?.presentCamera()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Chose Phote", style: .default, handler: { [weak self] _ in
+            self?.presentPhotoPicker()
+        }))
+        
+        present(actionSheet, animated: true)
+    }
+    //사용자가 이미지를 업데이트 할수있게 하기위해서 두개의 함수를 추가하고 ActionSheet에 handler를 버튼에 추가 하겠습니다.
+    func presentCamera() {
+        let vc = UIImagePickerController()
+        vc.sourceType = .camera
+        vc.delegate = self
+        // 편집을 허용하고 사용자가 사진을 찍은 후 잘린 사각형을 선택하도록하고 사진을 찍거나 카메라 롤에서 선택할수 있게 하겠습니다.
+        vc.allowsEditing = true
+        present(vc, animated: true)
+    }
+    func presentPhotoPicker() {
+        let vc = UIImagePickerController()
+        vc.sourceType = .photoLibrary
+        vc.delegate = self
+        vc.allowsEditing = true
+        present(vc, animated: true)
+    }
+   
+    //이미지 선택기(imagePickerController)는 사용자가 사진을 찍거나 사진을 선택할떄 호출됩니다.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        //editedImage를 선택하여 정사각형으로 선택 하겠습니다.또 선탣된 이미지가 선택사항이 되도록 래핑을 해제 하겠습니다
+        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
+            return
+        }
+        self.imageView.image = selectedImage
+    }
+    
+    
+    //사용자가 사진을 촬영하거나 사진을 선택 하고 취소 할수 있도록 imagePickerControllerDidCancel 추가합니다
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+   
+    
+    
+    
+}
