@@ -14,6 +14,8 @@ class ConversationsViewController: UIViewController {
         super.viewDidLoad()
         //사용자가 기본값을 기반으로 로그인 했는지 확인하고 로그인 한경우 화면을 유지하고 그렇지 않은경우 로그인 화면 표시
         view.backgroundColor = .red
+        
+        
     }
     //뷰가 표시되지 않도록 재정의
     override func viewDidAppear(_ animated: Bool) {
