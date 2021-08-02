@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,7 @@
 		400E73E026B4AFAF00533321 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73DF26B4AFAF00533321 /* NewConversationViewController.swift */; };
 		400E73E226B4AFC300533321 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73E126B4AFC300533321 /* ProfileViewController.swift */; };
 		400E73E526B4CB0D00533321 /* FrameExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73E426B4CB0D00533321 /* FrameExtensions.swift */; };
+		40354E6526B80CB700547D47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40354E6426B80CB700547D47 /* GoogleService-Info.plist */; };
 		405559CF26B4AA2500C037C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559CE26B4AA2500C037C7 /* AppDelegate.swift */; };
 		405559D126B4AA2500C037C7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559D026B4AA2500C037C7 /* SceneDelegate.swift */; };
 		405559D326B4AA2500C037C7 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405559D226B4AA2500C037C7 /* ConversationsViewController.swift */; };
@@ -32,6 +33,7 @@
 		400E73DF26B4AFAF00533321 /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		400E73E126B4AFC300533321 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		400E73E426B4CB0D00533321 /* FrameExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtensions.swift; sourceTree = "<group>"; };
+		40354E6426B80CB700547D47 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		405559CB26B4AA2500C037C7 /* Hun_ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hun_ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		405559CE26B4AA2500C037C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		405559D026B4AA2500C037C7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,7 +64,6 @@
 				090CA8A5495CEF2F7F504914 /* Pods-Hun_ChatApp.debug.xcconfig */,
 				6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -144,6 +145,7 @@
 		405559CD26B4AA2500C037C7 /* Hun_ChatApp */ = {
 			isa = PBXGroup;
 			children = (
+				40354E6426B80CB700547D47 /* GoogleService-Info.plist */,
 				400E73D526B4AD5D00533321 /* Resources */,
 				400E73D426B4AD4300533321 /* ViewModels */,
 				400E73D326B4AD2E00533321 /* Views */,
@@ -221,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				405559DB26B4AA2700C037C7 /* LaunchScreen.storyboard in Resources */,
+				40354E6526B80CB700547D47 /* GoogleService-Info.plist in Resources */,
 				405559D826B4AA2700C037C7 /* Assets.xcassets in Resources */,
 				405559D626B4AA2500C037C7 /* Main.storyboard in Resources */,
 			);

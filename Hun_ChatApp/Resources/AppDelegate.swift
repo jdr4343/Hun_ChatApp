@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
         return true
+        //시뮬레이터를 실행 시켜 firebase와 연결하고 만약 안된다면 shift + k를 눌러 프로젝트를 실행한후 다시 실행하십시오
     }
 
     // MARK: UISceneSession Lifecycle
