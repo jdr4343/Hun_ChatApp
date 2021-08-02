@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FB09B1946EA23FF69FB0907 /* Pods_Hun_ChatApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E63AA2EFB6BC1A48B9E57462 /* Pods_Hun_ChatApp.framework */; };
 		400E73D826B4AEF700533321 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73D726B4AEF700533321 /* LoginViewController.swift */; };
 		400E73DA26B4AF2000533321 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73D926B4AF2000533321 /* RegisterViewController.swift */; };
 		400E73DC26B4AF5B00533321 /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400E73DB26B4AF5B00533321 /* PhotoViewerViewController.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		090CA8A5495CEF2F7F504914 /* Pods-Hun_ChatApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hun_ChatApp.debug.xcconfig"; path = "Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp.debug.xcconfig"; sourceTree = "<group>"; };
 		400E73D726B4AEF700533321 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		400E73D926B4AF2000533321 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		400E73DB26B4AF5B00533321 /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +40,8 @@
 		405559D726B4AA2700C037C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		405559DA26B4AA2700C037C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		405559DC26B4AA2700C037C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hun_ChatApp.release.xcconfig"; path = "Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp.release.xcconfig"; sourceTree = "<group>"; };
+		E63AA2EFB6BC1A48B9E57462 /* Pods_Hun_ChatApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hun_ChatApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,12 +49,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FB09B1946EA23FF69FB0907 /* Pods_Hun_ChatApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F35C18BA1BE3B82E4EC871A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				090CA8A5495CEF2F7F504914 /* Pods-Hun_ChatApp.debug.xcconfig */,
+				6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		400E73D226B4AD1D00533321 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +128,8 @@
 			children = (
 				405559CD26B4AA2500C037C7 /* Hun_ChatApp */,
 				405559CC26B4AA2500C037C7 /* Products */,
+				0F35C18BA1BE3B82E4EC871A /* Pods */,
+				D564E579003FC94E37D913DA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,6 +153,14 @@
 			path = Hun_ChatApp;
 			sourceTree = "<group>";
 		};
+		D564E579003FC94E37D913DA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E63AA2EFB6BC1A48B9E57462 /* Pods_Hun_ChatApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,9 +168,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 405559DF26B4AA2700C037C7 /* Build configuration list for PBXNativeTarget "Hun_ChatApp" */;
 			buildPhases = (
+				7FC8C65436127AB572737F2C /* [CP] Check Pods Manifest.lock */,
 				405559C726B4AA2500C037C7 /* Sources */,
 				405559C826B4AA2500C037C7 /* Frameworks */,
 				405559C926B4AA2500C037C7 /* Resources */,
+				0F9D2669C01776B0020E5F28 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,6 +227,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0F9D2669C01776B0020E5F28 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7FC8C65436127AB572737F2C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hun_ChatApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		405559C726B4AA2500C037C7 /* Sources */ = {
@@ -359,6 +428,7 @@
 		};
 		405559E026B4AA2700C037C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 090CA8A5495CEF2F7F504914 /* Pods-Hun_ChatApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -379,6 +449,7 @@
 		};
 		405559E126B4AA2700C037C7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

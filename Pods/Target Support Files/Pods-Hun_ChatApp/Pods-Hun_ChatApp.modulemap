@@ -1,0 +1,6 @@
+framework module Pods_Hun_ChatApp {
+  umbrella header "Pods-Hun_ChatApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
