@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 //로그인 뷰 컨트롤러
 class LoginViewController: UIViewController {
 
@@ -144,8 +145,16 @@ class LoginViewController: UIViewController {
             alertUserLoginError()
             return
         }
+        //파이어 베이스 로그인 구현 / 사용자가 버튼을 탭하면 로그인 기능에서 FirebaseAuth.Auth.auth 라고 로그인 하도록 하고 이메일과 패스워드가 맞는지 확인하겠습니다.
+        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            guard let result = authResult, error == nil else {
+                print("Failed to login user with email: \(email)")
+                return
+            }
+            let user = result.user
+            print("Logged in User: \(user)")
+        }
         
-        //firebase login
     }
     
     
