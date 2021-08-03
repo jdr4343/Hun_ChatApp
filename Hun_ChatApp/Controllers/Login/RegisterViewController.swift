@@ -221,24 +221,44 @@ class RegisterViewController: UIViewController {
             return
         }
         
-        //파이어베이스를 여기에서 구축하겠습니다. / 이메일과 비밀번호를 사용하여 계정을 만들수 있도록 코드를 선언하여 주겠습니다.
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            //오류가 발생하지 않았는지 확인하기 위해 가드문을 추가 하겠습니다. 오류가 발생하면 프린트를 출력 할것입니다.
-            guard let result = authResult, error == nil else {
-                print("Error cureating User")
+        //파이어베이스를 여기에서 구축하겠습니다.
+        
+        //회원가입시 사용자 이메일이 존재하는 경우 에러를 표시할것 입니다.
+        DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
+            guard let strongSelf = self else {
                 return
             }
-            //생성된 사용자이고 이경우에는 사용자를 인쇄문을 출력 하겠습니다.
-            let user = result.user
-            print("Created User: \(user)")
-        }
+            
+            guard !exists else {
+                //user already exists
+                strongSelf.alertUserLoginError(message: "Looks like a user account for that email addres already exists.")
+                return
+            }
+            // 이메일과 비밀번호를 사용하여 계정을 만들수 있도록 코드를 선언하여 주겠습니다.
+            FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { authResult, error in
+               
+                //오류가 발생하지 않았는지 확인하기 위해 가드문을 추가 하겠습니다. 오류가 발생하면 프린트를 출력 할것입니다.
+                guard authResult != nil, error == nil else {
+                    print("Error cureating User")
+                    return
+                }
+                //이렇게 작성해주면 데이터베이스 항목과 언급한 작업이 수행됩니다.
+                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
+                                                                    lastName: lastName,
+                                                                    emailAddress: email))
+                
+                //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            })
+        })
+    
     }
     
     
-    func alertUserLoginError() {
+    func alertUserLoginError(message: String = "please enter all information to create a new account") {
         //경고 메시지를 추가하고 사용자가 취소 할수 있게 구현 하겠습니다.
         let alert = UIAlertController(title: "Woops",
-                                      message: "please enter all information to create a new account",
+                                      message: message,
                                       preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Dismiss",
