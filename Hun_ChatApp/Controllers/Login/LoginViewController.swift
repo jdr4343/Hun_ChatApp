@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 //로그인 뷰 컨트롤러
 class LoginViewController: UIViewController {
 
@@ -67,8 +68,8 @@ class LoginViewController: UIViewController {
         return imageView
     }()
     
-    
-    
+    //글로벌 스코프로 이동하고 이름이 겹치므로 변경
+    private let facebookLoginButton = FBLoginButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +94,12 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(emailTextFiled)
         scrollView.addSubview(passwordTextFiled)
         scrollView.addSubview(loginButton)
+        
+        //페이스북 로그인 버튼 코드 붙여넣고 코드와 글로벌 스코프로 연결하겠습니다.
+        //loginButton.center = view.center
+        scrollView.addSubview(facebookLoginButton)
+
+        
     }
     //상위, 하위 LayoutSubview를 재정의 하고 뷰를 호출 / 이미지 뷰를 위한 프레임을 중앙의 정사각형으로 구현 하겠습니다
     override func viewDidLayoutSubviews() {
@@ -113,14 +120,20 @@ class LoginViewController: UIViewController {
         passwordTextFiled.frame = CGRect(x: 30,
                                       y: emailTextFiled.bottom+5,
                                       width: scrollView.width-60,
-                                 height: 52)
+                                      height: 52)
         
         loginButton.frame = CGRect(x: 30,
-                                      y: passwordTextFiled.bottom+10,
-                                      width: scrollView.width-60,
-                                 height: 52)
+                                   y: passwordTextFiled.bottom+10,
+                                   width: scrollView.width-60,
+                                   height: 52)
+        
+        facebookLoginButton.frame = CGRect(x: 30,
+                                           y: loginButton.bottom+10,
+                                           width: scrollView.width-60,
+                                           height: 52)
+        facebookLoginButton.frame.origin.y = loginButton.bottom+20
     }
-     
+    
     
     
     @objc private func didTapResister() {
