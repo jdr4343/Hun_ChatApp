@@ -235,8 +235,7 @@ class RegisterViewController: UIViewController {
                 return
             }
             // 이메일과 비밀번호를 사용하여 계정을 만들수 있도록 코드를 선언하여 주겠습니다.
-            FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { authResult, error in
-               
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
                 //오류가 발생하지 않았는지 확인하기 위해 가드문을 추가 하겠습니다. 오류가 발생하면 프린트를 출력 할것입니다.
                 guard authResult != nil, error == nil else {
                     print("Error cureating User")
