@@ -73,6 +73,10 @@ class LoginViewController: UIViewController {
         let button = FBLoginButton()
         //사용자의 이메일 및 공개 프로필 사용
         button.permissions = ["email", "public_profile"]
+        button.layer.cornerRadius = 12
+        button.layer.masksToBounds = true
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        
         return button
     }()
    
@@ -138,7 +142,7 @@ class LoginViewController: UIViewController {
                                            y: loginButton.bottom+10,
                                            width: scrollView.width-60,
                                            height: 52)
-        facebookLoginButton.frame.origin.y = loginButton.bottom+20
+        facebookLoginButton.frame.origin.y = loginButton.bottom+10
     }
     
     

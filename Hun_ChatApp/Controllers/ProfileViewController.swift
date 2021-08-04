@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 //모든 설정이 완료되면 로그인한 사용자가 프로필로 이동 하여 프로필을 관리할수 있도록 프로필 구현
 class ProfileViewController: UIViewController {
     
@@ -55,6 +56,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                                                 guard let strongSelf = self else {
                                                     return
                                                 }
+                                                //로그아웃을 누르면 Firebase 세션에서는 로그아웃 하지만 facebook 버튼은 여전히 로그아웃 입니다.facebook 세션에서도 동시에 로그인 하도록 구현하겠습니다.
+                                                FBSDKLoginKit.LoginManager().logOut()
+                                                
                                                 //do catch블록을 작성하여 오류에 대비하겠습니다.
                                                 do {
                                                     try FirebaseAuth.Auth.auth().signOut()
