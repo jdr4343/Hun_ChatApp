@@ -62,7 +62,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                                                     
                                                         let vc = LoginViewController()
                                                         let nav = UINavigationController(rootViewController: vc)
-                                                         //로그인한 상태가 아니라면 로그인 페이지 등록을 제출하지ㅣ 않고 닫을수 있게 아래로 스와이프 하여 해제 할수 있도록 구현
                                                         nav.modalPresentationStyle = .fullScreen
                                                         strongSelf.present(nav, animated: true)
                                                 }

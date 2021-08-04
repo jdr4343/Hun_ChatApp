@@ -221,7 +221,7 @@ extension LoginViewController: LoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         //no operation
     }
-
+    
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         //LoginManagerLoginResult를 클릭하여 확인해보면 클래스이고 취소 토큰이 있으므로 토큰을 가져오면 됩니다.
         //여기에 토큰이 있으면 자격을 생성하고 이를 firebase에 전달 합니다.
@@ -230,24 +230,61 @@ extension LoginViewController: LoginButtonDelegate {
             return
         }
         //페이스북 데이터 요청 /이메일 /이름
-
-        let credential = FacebookAuthProvider.credential(withAccessToken: token)
-
-        FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
-            guard let strongSelf = self else {
-             return
-            }
-            //클로저에서 가드 결과가 인증 결과와 같고 오류가 nil이면 출력합니다.
-            guard authResult != nil, error == nil else {
-                if let error = error {
-                print("Facebook credential login failed, MFA may be needed")
-                }
-                //실제로 계시할수 있는 액세스 추가
-                
+        let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me",
+                                                        parameters: ["fields": "email, name"],
+                                                         tokenString: token,
+                                                         version: nil,
+                                                         httpMethod: .get)
+        facebookRequest.start(completion: { _, result, error in
+            guard let result = result as? [String: Any],
+                  error == nil else {
+                print("Failed to make facebook graph request")
                 return
             }
-            print("Successfully logged user in")
-            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            //데이터 가져오기
+            guard let userName = result["name"] as? String,
+                  let email = result["email"] as? String else {
+                print("Faield to get email and name from fb result")
+               return
+           }
+            //받아온 데이터 ["id": 989961108211470, "name": 신지훈] 내의 공백제거
+            let nameComponents = userName.components(separatedBy: " ")
+            guard nameComponents.count == 2 else {
+                return
+            }
+            
+            let firstName = nameComponents[0]
+            let lastName = nameComponents[1]
+
+            //facebook에서 요청한 데이터 성과 이름 이메일로 추출
+            DatabaseManager.shared.userExists(with: email, completion: { exists in
+                if !exists {
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
+                                                                        lastName: lastName,
+                                                                        emailAddress: email))
+                }
+            })
+            
+            let credential = FacebookAuthProvider.credential(withAccessToken: token)
+            
+            FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                //클로저에서 가드 결과가 인증 결과와 같고 오류가 nil이면 출력합니다.
+                guard authResult != nil, error == nil else {
+                    if let error = error {
+                        print("Facebook credential login failed, MFA may be needed")
+                    }
+                    //실제로 계시할수 있는 액세스 추가
+                    
+                    return
+                }
+                print("Successfully logged user in")
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            })
         })
+        
     }
 }
+
