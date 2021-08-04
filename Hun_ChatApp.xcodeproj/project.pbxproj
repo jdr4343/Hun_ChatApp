@@ -44,6 +44,7 @@
 		405559D726B4AA2700C037C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		405559DA26B4AA2700C037C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		405559DC26B4AA2700C037C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		409742FD26BAF54F00C74610 /* Hun_ChatApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hun_ChatApp.entitlements; sourceTree = "<group>"; };
 		6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hun_ChatApp.release.xcconfig"; path = "Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp.release.xcconfig"; sourceTree = "<group>"; };
 		E63AA2EFB6BC1A48B9E57462 /* Pods_Hun_ChatApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hun_ChatApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -148,6 +149,7 @@
 		405559CD26B4AA2500C037C7 /* Hun_ChatApp */ = {
 			isa = PBXGroup;
 			children = (
+				409742FD26BAF54F00C74610 /* Hun_ChatApp.entitlements */,
 				40354E6426B80CB700547D47 /* GoogleService-Info.plist */,
 				400E73D526B4AD5D00533321 /* Resources */,
 				400E73D426B4AD4300533321 /* ViewModels */,
@@ -439,6 +441,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hun_ChatApp/Hun_ChatApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L765CYF8SR;
 				INFOPLIST_FILE = Hun_ChatApp/Info.plist;
@@ -460,6 +463,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hun_ChatApp/Hun_ChatApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L765CYF8SR;
 				INFOPLIST_FILE = Hun_ChatApp/Info.plist;

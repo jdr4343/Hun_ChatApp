@@ -248,19 +248,20 @@ extension LoginViewController: LoginButtonDelegate {
                return
            }
             print("\(result)")
-            //받아온 데이터 ["name": 신지훈, "id": 989961108211470, "email": jdr4343@naver.com] 내의 공백제거
-            let nameComponents = userName.components(separatedBy: " ")
-            guard nameComponents.count == 2 else {
-                return
-            }
-            
-            let firstName = nameComponents[0]
-            let lastName = nameComponents[1]
+//            //받아온 데이터 ["name": 아무개, "id": 989961108211470, "email": 000000@naver.com]
+            //외국인이라면 이코드 사용 나중에 두개를 한꺼번에 구성하는 코드를 짜봐야 할듯함.
+//            let nameComponents = userName.components(separatedBy: " ")
+//            guard nameComponents.count == 2 else {
+//                return
+//            }
+//
+//            let firstName = nameComponents[0]
+//            let lastName = nameComponents[1]
 
             //facebook에서 요청한 데이터 성과 이름 이메일로 추출
             DatabaseManager.shared.userExists(with: email, completion: { exists in
-                if exists {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                if !exists {
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: userName, lastName: "", emailAddress: email))
                 }
             })
             
