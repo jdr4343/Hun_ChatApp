@@ -67,16 +67,16 @@
       <dict>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>fbAPP-ID</string>
+        <string>fb138457861703448</string>
       </array>
       </dict>
     </array>
     <key>FacebookAppID</key>
-    <string>APP-ID</string>
+    <string>138457861703448</string>
     <key>FacebookClientToken</key>
-    <string>CLIENT-TOKEN</string>
+    <string>0383dc9eada9e243cdfad95fe0d81499</string>
     <key>FacebookDisplayName</key>
-    <string>APP-NAME</string>
+    <string>Hun_ChatApp</string>
     <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>fbapi</string>

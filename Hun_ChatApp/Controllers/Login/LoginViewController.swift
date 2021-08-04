@@ -69,8 +69,13 @@ class LoginViewController: UIViewController {
     }()
     
     //글로벌 스코프로 이동하고 이름이 겹치므로 변경
-    private let facebookLoginButton = FBLoginButton()
-    
+    private let facebookLoginButton: FBLoginButton = {
+        let button = FBLoginButton()
+        //사용자의 이메일 및 공개 프로필 사용
+        button.permissions = ["email", "public_profile"]
+        return button
+    }()
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -86,6 +91,8 @@ class LoginViewController: UIViewController {
         emailTextFiled.delegate = self
         passwordTextFiled.delegate = self
         
+        //페이스북 로그인이 성공했는지 확인하고 Facebook에서 요청 하도록 범위 설정 하므로 facebookButton에 대한 델리게이트 설정
+        facebookLoginButton.delegate = self
         
         
         //이미지 서브 뷰 추가 / 스크롤 뷰를 추가하고 사용자 인터페이스 요소를 추가하겠습니다.
@@ -206,5 +213,41 @@ extension LoginViewController: UITextFieldDelegate {
             loginButtonTapped()
         }
         return true
+    }
+}
+//facebookLoginButton에 델리게이트를 추가하기 위해서 확장자를 선언하고 필수기능선언
+extension LoginViewController: LoginButtonDelegate {
+    //facebook 사용자가 로긍니 한 것을 감지하면 로그인 버튼을 탭하여 로그아웃하면 자동으로 로그아웃을 표시하도록 버튼이 업데이트 됩니다. 이 앱의 경우 뷰 컨트롤러에 로그인을 표시하지 않기 때문에 적용할수 없습니다. 필수메소드이기때문에 코드만 남겨두고 아무 작업도 하지 않을것입니다
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
+        //no operation
+    }
+
+    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
+        //LoginManagerLoginResult를 클릭하여 확인해보면 클래스이고 취소 토큰이 있으므로 토큰을 가져오면 됩니다.
+        //여기에 토큰이 있으면 자격을 생성하고 이를 firebase에 전달 합니다.
+        guard let token = result?.token?.tokenString else {
+            print("User failed to log in with facebook")
+            return
+        }
+        //페이스북 데이터 요청 /이메일 /이름
+
+        let credential = FacebookAuthProvider.credential(withAccessToken: token)
+
+        FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
+            guard let strongSelf = self else {
+             return
+            }
+            //클로저에서 가드 결과가 인증 결과와 같고 오류가 nil이면 출력합니다.
+            guard authResult != nil, error == nil else {
+                if let error = error {
+                print("Facebook credential login failed, MFA may be needed")
+                }
+                //실제로 계시할수 있는 액세스 추가
+                
+                return
+            }
+            print("Successfully logged user in")
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
     }
 }
