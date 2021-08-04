@@ -247,7 +247,8 @@ extension LoginViewController: LoginButtonDelegate {
                 print("Faield to get email and name from fb result")
                return
            }
-            //받아온 데이터 ["id": 989961108211470, "name": 신지훈] 내의 공백제거
+            print("\(result)")
+            //받아온 데이터 ["name": 신지훈, "id": 989961108211470, "email": jdr4343@naver.com] 내의 공백제거
             let nameComponents = userName.components(separatedBy: " ")
             guard nameComponents.count == 2 else {
                 return
@@ -258,12 +259,11 @@ extension LoginViewController: LoginButtonDelegate {
 
             //facebook에서 요청한 데이터 성과 이름 이메일로 추출
             DatabaseManager.shared.userExists(with: email, completion: { exists in
-                if !exists {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
-                                                                        lastName: lastName,
-                                                                        emailAddress: email))
+                if exists {
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
                 }
             })
+            
             
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
             
