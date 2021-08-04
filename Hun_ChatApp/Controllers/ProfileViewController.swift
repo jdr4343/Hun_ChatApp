@@ -45,8 +45,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         //실수로 로그아웃 할일이 없도록 경고메시지를 출력 하겠습니다.
-        let actionSheet = UIAlertController(title: "",
-                                            message: "",
+        let actionSheet = UIAlertController(title: "Are you sure you want to log out?",
+                                            message: "See you next time!",
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: "Log Out",
                                             style: .destructive,
