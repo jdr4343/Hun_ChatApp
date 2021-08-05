@@ -129,6 +129,11 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
+  - Realm (10.12.0):
+    - Realm/Headers (= 10.12.0)
+  - Realm/Headers (10.12.0)
+  - RealmSwift (10.12.0):
+    - Realm (= 10.12.0)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
@@ -141,6 +146,7 @@ DEPENDENCIES:
   - GoogleSignIn
   - JGProgressHUD
   - MessageKit
+  - RealmSwift
   - SDWebImage
 
 SPEC REPOS:
@@ -169,6 +175,8 @@ SPEC REPOS:
     - MessageKit
     - nanopb
     - PromisesObjC
+    - Realm
+    - RealmSwift
     - SDWebImage
 
 SPEC CHECKSUMS:
@@ -196,8 +204,10 @@ SPEC CHECKSUMS:
   MessageKit: d153fbbbcb12f3f4045a1ba8874298924dacfb62
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Realm: 32488213acb44660539c619d620cec1bac046166
+  RealmSwift: 0abdca6231d5ff8a4f84cef9c1121ef95a483faf
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: 86a363fc4949b5f6779c23cddb809a5a72a24121
+PODFILE CHECKSUM: 4520fbae9657b9412406bba6eca965a0591342e6
 
 COCOAPODS: 1.10.1

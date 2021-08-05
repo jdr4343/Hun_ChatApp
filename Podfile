@@ -18,5 +18,6 @@ pod 'GoogleSignIn'
 pod 'MessageKit'
 pod 'JGProgressHUD'
 pod 'SDWebImage'
+pod 'RealmSwift'
 
 end
