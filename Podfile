@@ -16,5 +16,7 @@ pod 'FBSDKLoginKit'
 pod 'GoogleSignIn'
 
 pod 'MessageKit'
+pod 'JGProgressHUD'
+
 
 end
