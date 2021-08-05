@@ -8,9 +8,14 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import JGProgressHUD
+
 //로그인 뷰 컨트롤러
 class LoginViewController: UIViewController {
-
+//스피너
+    private let spinner = JGProgressHUD(style: .dark)
+    
+    
     //사용자 인터페이스 요소 추가 / 스크롤 뷰 / 이메일,비밀번호를 적을 두개의 텍스트 필드 / 로그인 버튼
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -169,17 +174,29 @@ class LoginViewController: UIViewController {
             alertUserLoginError()
             return
         }
+        //로그인 버튼을 탭한 firebase 작업을 수행하는 기능을 만들겠습니다.그리고 firebase 인증시도에서 스피너를 제거하겠습니다.
+        spinner.show(in: view)
+        
         //파이어 베이스 로그인 구현 / 사용자가 버튼을 탭하면 로그인 기능에서 FirebaseAuth.Auth.auth 라고 로그인 하도록 하고 이메일과 패스워드가 맞는지 확인하겠습니다.
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { [weak self] authResult, error in
+            
             guard let strongSelf = self else {
                 return
             }
+            //firebase 인증시도에서 스피너를 제거하겠습니다.
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
+            
+            
+            
+            
             //오류가 발생하지 않았는지 확인하기 위해 가드문을 추가 하겠습니다. 오류가 발생하면 프린트를 출력 할것입니다.
             guard let result = authResult, error == nil else {
                 print("Error cureating User")
                 return
             }
-          
+            
             let user = result.user
             print("Loffed IN User:\(user)")
             //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
@@ -199,7 +216,7 @@ class LoginViewController: UIViewController {
                                       handler: nil))
         present(alert, animated: true)
     }
-
+    
     
 }
 //Controller를 작성하고 UITextFieldDelegate를 준수하므로 확장은 코드를 분리하는 정말 좋은방법 입니다. 직접 위의 LoginViewController class 코드에 delegate를 추가 할수 있지만 그러면 모든 코드를 같은 블록에 넣어야하니 많이 지저분해집니다.

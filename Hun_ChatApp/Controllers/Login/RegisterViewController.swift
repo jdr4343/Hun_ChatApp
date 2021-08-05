@@ -7,9 +7,13 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
+
 //새 계정을 만드는 컨트롤러
 class RegisterViewController: UIViewController {
     //LoginViewController에서 작성한 내용을 RegisterViewController에 복사
+    
+    private let spinner = JGProgressHUD(style: .dark)
     
     //사용자 인터페이스 요소 추가 / 스크롤 뷰 / 이메일,비밀번호를 적을 두개의 텍스트 필드 / 로그인 버튼
     private let scrollView: UIScrollView = {
@@ -220,6 +224,8 @@ class RegisterViewController: UIViewController {
             alertUserLoginError()
             return
         }
+        //스피너
+        spinner.show(in: view)
         
         //파이어베이스를 여기에서 구축하겠습니다.
         
@@ -228,6 +234,11 @@ class RegisterViewController: UIViewController {
             guard let strongSelf = self else {
                 return
             }
+            //스피너 제거
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
+            
             
             guard !exists else {
                 //user already exists
