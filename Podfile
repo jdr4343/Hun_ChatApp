@@ -15,4 +15,6 @@ pod 'FBSDKLoginKit'
 # Google Sign IN
 pod 'GoogleSignIn'
 
+pod 'MessageKit'
+
 end
