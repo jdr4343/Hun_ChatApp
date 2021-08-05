@@ -69,3 +69,4 @@ extension NewConversationViewController: UISearchBarDelegate {
         
     }
 }
+

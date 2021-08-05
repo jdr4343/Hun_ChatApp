@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "AppAuth 2.h"
+#import "AppAuthCore 2.h"
 #import "AppAuthCore.h"
 #import "OIDAuthorizationRequest.h"
 #import "OIDAuthorizationResponse.h"
@@ -41,7 +43,9 @@
 #import "OIDTokenUtilities.h"
 #import "OIDURLQueryComponent.h"
 #import "OIDURLSessionProvider.h"
+#import "AppAuth 2.h"
 #import "AppAuth.h"
+#import "AppAuthCore 2.h"
 #import "AppAuthCore.h"
 #import "OIDAuthorizationRequest.h"
 #import "OIDAuthorizationResponse.h"
