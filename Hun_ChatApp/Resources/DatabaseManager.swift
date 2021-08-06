@@ -44,7 +44,7 @@ extension DatabaseManager {
     
     ///Inserts new user to database
     //삽입된 사용자 함수에 완료 블록을 추가하고 완료 되면 호출자에게 알릴 것이고 데이터베이스에 쓰기가 완료되면 그렇게 할 것 입니다. 그런다음 이미지를 업로드 하고 싶으므로 기능을 추가할 것입니다.
-    public func insertUser(with user: ChatAppUser, complaetion: @escaping (Bool) -> Void) {
+    public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void) {
         //사용자를 구분하는 고유한 사항이 이메일이기떄문에 따로 추가할필요는 없습니다.따라서 동일한 주소를 가진 사용자는 사용자가 될수 없는 것입니다.
         database.child(user.safeEmail).setValue([
             "first_name": user.firstName,
@@ -52,10 +52,46 @@ extension DatabaseManager {
         ], withCompletionBlock: { error, _ in
             guard error == nil else {
                 print("failed out write to database")
-                complaetion(false)
+                completion(false)
                 return
             }
-            complaetion(true)
+            //존재하지 않는 경우 기존 사용자 배열에 대한 참조를 얻으려고 시도 /데이터베이스에서 참조를 얻거나 해당 값을 가져오겠습니다.
+            self.database.child("users").observeSingleEvent(of: .value, with: { snapshot in
+                if var userCollection = snapshot.value as? [[String: String]] {
+                    //사용자를 dictionary에 추가 하겠습니다.
+                    let newElement = [
+                        "name": user.firstName + " " + user.lastName,
+                        "email": user.safeEmail
+                    ]
+                    
+                    userCollection.append(newElement)
+                    
+                    self.database.child("users").setValue(userCollection, withCompletionBlock: { error, _ in
+                        guard  error == nil else{
+                            completion(false)
+                            return
+                        }
+                        completion(true)
+                    })
+                } else {
+                    //배열을 만들겠습니다.
+                    let newCollection: [[String: String]] = [
+                        [
+                            "name": user.firstName + " " + user.lastName,
+                            "email": user.safeEmail
+                        ]
+                    ]
+                    self.database.child("users").setValue(newCollection, withCompletionBlock: { error, _ in
+                        guard  error == nil else{
+                            completion(false)
+                            return
+                        }
+                        completion(true)
+                    })
+                }
+            })
+            
+            
         })
     }
 }
@@ -65,7 +101,7 @@ struct ChatAppUser {
     let firstName: String
     let lastName: String
     let emailAddress: String
-  //safe Email 계산 속성 추가 safe Email이 반환되려면 위의 코드에서 이메일 주소 속성을 가져와서 문자열을 교체하고 반환 하면됩니다.
+    //safe Email 계산 속성 추가 safe Email이 반환되려면 위의 코드에서 이메일 주소 속성을 가져와서 문자열을 교체하고 반환 하면됩니다.
     var safeEmail: String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
@@ -73,7 +109,7 @@ struct ChatAppUser {
     }
     //사진 파일 이름
     var profilePictureFileName: String {
-       //images/jdr4343-naver-com_Profile_Picture.png 기본적으로 유형을 이런식으로 만들고 싶습니다.
+        //images/jdr4343-naver-com_Profile_Picture.png 기본적으로 유형을 이런식으로 만들고 싶습니다.
         return "\(safeEmail)_Profile_picture.png"
     }
 }

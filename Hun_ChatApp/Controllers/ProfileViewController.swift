@@ -39,7 +39,7 @@ class ProfileViewController: UIViewController {
         }
         //데이터베이스에게 이메일 전달
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-        let filename = safeEmail + "_profile_picture.png"
+        let filename = safeEmail + "_Profile_picture.png"
         //모듈을 유지하도록 하는 함수 추가 / 디렉터리 구조
         let path = "images/"+filename
         
@@ -58,10 +58,11 @@ class ProfileViewController: UIViewController {
         imageView.layer.borderColor = UIColor.white.cgColor
         imageView.layer.borderWidth = 3
         imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = imageView.width/2
         headerView.addSubview(imageView)
         //path 경로를 사용하여 downloadURL을 가져올수 있으므로 워크플로우가 먼저 URL을 얻는 경로를 제공한다음에 해당 download를 사용해야합니다.
         //URL을 사용하여 이미지 자체를 다운로드 하므로 몇가지 후프를 거치게 됩니다.
-        StorageManager.shared.downloadURL(for: path, complation: { [weak self]  result in
+        StorageManager.shared.downloadURL(for: path, completion: { [weak self] result in
             switch result {
             case .success(let url):
                 // 이미지 다운로드
@@ -83,7 +84,8 @@ class ProfileViewController: UIViewController {
                 let image = UIImage(data: data)
                 imageView.image = image
             }
-        }).resume()
+        })
+        .resume()
     }
     
     

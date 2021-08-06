@@ -257,7 +257,7 @@ class RegisterViewController: UIViewController {
                                            lastName: lastName,
                                            emailAddress: email)
                 
-                DatabaseManager.shared.insertUser(with: chatUser, complaetion: { success in
+                DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
                     if success {
                         //upload image
                         guard let image = strongSelf.imageView.image,
