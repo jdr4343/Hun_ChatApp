@@ -318,7 +318,7 @@ extension LoginViewController: LoginButtonDelegate {
                                     }
 
                                 })
-                            })
+                            }).resume()//중요
                             
                         }
                     })
