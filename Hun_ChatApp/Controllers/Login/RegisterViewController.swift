@@ -83,7 +83,7 @@ class RegisterViewController: UIViewController {
         filed.backgroundColor = .white
         return filed
     }()
-
+    
     
     
     private let registerButton: UIButton = {
@@ -123,7 +123,7 @@ class RegisterViewController: UIViewController {
                                                             action: #selector(didTapRegister))
         
         //loginButton 연결 대상 추가 / 사용자가 탭을 하면 로그인 기능 호출 / 사용자가 비밀번호 필드에서 리턴을 누르면 자동으로 로그인 기능 호출 /필드가 delgate를 호출 할수 있도록 아래에 extention(LoginViewController확장자)를 생성하여 구현하겠습니다
-      registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         firstNameField.delegate = self
         lastNameField.delegate = self
         emailTextFiled.delegate = self
@@ -146,13 +146,13 @@ class RegisterViewController: UIViewController {
         
         //사용자가 프로필 사진을 탭하고 프로필를 변경할수 있도록 addGestureRecognizer을 추가하여 제스처를 추가하겠습니다.
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapChangeProfilePic))
-//        gesture.numberOfTouchesRequired = 1
-//        gesture.numberOfTapsRequired = 1
+        //        gesture.numberOfTouchesRequired = 1
+        //        gesture.numberOfTapsRequired = 1
         imageView.addGestureRecognizer(gesture)
-
+        
     }
     @objc private func didTapChangeProfilePic() {
-           //프로필 탭 액션 / 인포에서 카메라, 사진 권한 허용 /아래에 확장자 설정
+        //프로필 탭 액션 / 인포에서 카메라, 사진 권한 허용 /아래에 확장자 설정
         presentPhotoActionSheet()
     }
     
@@ -374,7 +374,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-   
+    
     
     
     

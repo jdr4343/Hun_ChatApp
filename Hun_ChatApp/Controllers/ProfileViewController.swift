@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import FirebaseStorage
 //모든 설정이 완료되면 로그인한 사용자가 프로필로 이동 하여 프로필을 관리할수 있도록 프로필 구현
 class ProfileViewController: UIViewController {
     
@@ -25,7 +26,43 @@ class ProfileViewController: UIViewController {
         //아래에 확장자를 선언하여 delegate와 dataSource를 연결해줍니다.
         tableView.delegate = self
         tableView.dataSource = self
+        
+        
+        
+        //헤더뷰 생성
+        tableView.tableHeaderView = createTableHeader()
     }
+    func createTableHeader() -> UIView? {
+        //해당 사용자 이메일이 저장되어 있지 않으면 테이블에 표시할 프로필 헤더를 만들고 싶지 않습니다.
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
+            return nil
+        }
+        //데이터베이스에게 이메일 전달
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        let filename = safeEmail + "_profile_picture.png"
+        //모듈을 유지하도록 하는 함수 추가 / 디렉터리 구조
+        let path = "images/"+filename
+        
+        let headerView = UIView(frame: CGRect(x: 0,
+                                              y: 0,
+                                              width: self.view.width,
+                                              height: 300))
+        headerView.backgroundColor = .link
+        let imageView = UIImageView(frame: CGRect(x: (headerView .width-150) / 2,
+                                                  y: 75,
+                                                  width: 150,
+                                                  height: 150))
+        
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .white
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 3
+        imageView.layer.masksToBounds = true
+        headerView.addSubview(imageView)
+        return headerView
+    }
+    
+    
     
 }
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {

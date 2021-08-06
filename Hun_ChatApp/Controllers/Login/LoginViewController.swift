@@ -197,8 +197,11 @@ class LoginViewController: UIViewController {
                 return
             }
             
+            //사용자가 로그인하고 탐색 컨트롤러를 해제 하므로 해제 하기전에 사용자 이메일 주소를 저장하겠습니다. 사용자 이메일을 저장하는 이유는 저장소 버킷이 이미지에 대해 사용할수 있는 형식을 가지고 있기 때문입니다. 사용자에 대한 이미지를 쿼리하기 위한 이메일 입니다.
             let user = result.user
-            print("Loffed IN User:\(user)")
+            UserDefaults.standard.set(email, forKey: "email")
+            
+            print("Logged IN User:\(user)")
             //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
@@ -275,6 +278,7 @@ extension LoginViewController: LoginButtonDelegate {
                 return
             }
             
+            UserDefaults.standard.set(email, forKey: "email")
 //            //받아온 데이터 ["name": 아무개, "id": 989961108211470, "email": 000000@naver.com]
             //외국인이라면 이코드 사용 나중에 두개를 한꺼번에 구성하는 코드를 짜봐야 할듯함.
 //            let nameComponents = userName.components(separatedBy: " ")

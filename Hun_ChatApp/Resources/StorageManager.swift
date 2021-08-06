@@ -9,7 +9,7 @@ import Foundation
 import FirebaseStorage
 //항상 생성한 객체를 분리하여 재사용이 가능하고 애플리케이션 전체에서 모듈식으로 재활용 할것입니다.
 
-//finer 속성으로 상속이 불가능한 클래스를 만들고 정적속성인 shared를 만들겠습니다.
+//final 속성으로 상속이 불가능한 클래스를 만들고 정적속성인 shared를 만들겠습니다.
 final class StorageManager {
     static let shared = StorageManager()
     //저장소
@@ -46,7 +46,18 @@ final class StorageManager {
         case failedToUpload
         case failedToGetDownloadUrl
     }
-}
+    //지정한 경로를 기반으로 다운로드 URL을 반환할 함수를 만들겠습니다.
+    public func downloadURL(for path: String, complation: @escaping (Result<URL, Error>) -> Void) {
+        let reference = storage.child(path)
+        reference.downloadURL(completion: { url, error in
+            guard let url = url, error == nil else {
+                complation(.failure(StorageErrors.failedToGetDownloadUrl))
+                return
+            }
+            complation(.success(url))
+        })
+    }
+ }
 
 
 
