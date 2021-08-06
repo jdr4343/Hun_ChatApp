@@ -3,7 +3,7 @@
 //  Hun_ChatApp
 //
 //  Created by 신지훈 on 2021/07/31.
-//  기본적으로 이메일과 비밀번호를 사용하여 사용자를 만드는 것이지만 여기 등록되어 있는 양식에는 이름 성 도 포함되어 있습니다. 프로필이 사진 필드 이므로 이 정보의 이름과 이미지를 업로드 한 곳마다 데이터베이스에 보관하고 계정은 이메일과 비밀번호로 식별하므로 이 앱에서는 간단히 이메일과 비밀번호 부분을 살펴본 다음 데이터 베이스에 대해 자세히 살펴 보겠습니다.데이터 베이스가 훨씬 더 복잡하기 때문입니다. 스키마 및 기타 사항을 설정하는 방법을 정말 잘 이해하는것이 중요합니다.
+//  먼저 사용자가 있는지 확인하고 스피너를 닫습니다.그런다음 Firebase인증 참조에서 벗어나 사용자를 만든다음 디스크의 위치를 호출합니다. 성공하면 데이터베이스가 표시되는 것이 아니라 디스크가 아닌 데이터베이스에  쓰지 않습니다.
 
 import UIKit
 import FirebaseAuth
@@ -253,15 +253,36 @@ class RegisterViewController: UIViewController {
                     return
                 }
                 //이렇게 작성해주면 데이터베이스 항목과 언급한 작업이 수행됩니다.
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
-                                                                    lastName: lastName,
-                                                                    emailAddress: email))
+                let chatUser = ChatAppUser(firstName: firstName,
+                                           lastName: lastName,
+                                           emailAddress: email)
                 
-                //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
-                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                DatabaseManager.shared.insertUser(with: chatUser, complaetion: { success in
+                    if success {
+                        //upload image
+                        guard let image = strongSelf.imageView.image,
+                              let data = image.pngData() else {
+                            return
+                        }
+                        //위의 작업을 수행한 후 파일이름 생성
+                        let fileName = chatUser.profilePictureFileName
+                        StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName, completion: { result in
+                            //결과에 실패 또는 성공이 있기 때문에 간단히 전환할수 있게 하기위해 스위치문 추가 /성공의 경우 다운로드 Url을 가지게 되고 오류라면 오류를 출력 할것입니다. 다운로드 하면 업로드 하고 다운로드 URL을 다시 제공하여 캐시에 저장 하겠습니다
+                            switch result {
+                            case .success(let downloadUrl):
+                                UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                print(downloadUrl)
+                            case .failure(let error):
+                                print("Storage manager error: \(error)")
+                            }
+                            
+                        })
+                    }
+                    //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
+                    strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                })
             })
         })
-    
     }
     
     
@@ -278,7 +299,7 @@ class RegisterViewController: UIViewController {
     }
     
     
-    }
+}
 
 //Controller를 작성하고 UITextFieldDelegate를 준수하므로 확장은 코드를 분리하는 정말 좋은방법 입니다. 직접 위의 LoginViewController class 코드에 delegate를 추가 할수 있지만 그러면 모든 코드를 같은 블록에 넣어야하니 많이 지저분해집니다.
 extension RegisterViewController: UITextFieldDelegate {
@@ -337,7 +358,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
         vc.allowsEditing = true
         present(vc, animated: true)
     }
-   
+    
     //이미지 선택기(imagePickerController)는 사용자가 사진을 찍거나 사진을 선택할떄 호출됩니다.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)

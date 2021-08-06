@@ -252,7 +252,7 @@ extension LoginViewController: LoginButtonDelegate {
         }
         //페이스북 데이터 요청 /이메일 /이름
         let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me",
-                                                        parameters: ["fields": "email, name"],
+                                                         parameters: ["fields": "email, name, picture.type(large)"],
                                                          tokenString: token,
                                                          version: nil,
                                                          httpMethod: .get)
@@ -262,13 +262,19 @@ extension LoginViewController: LoginButtonDelegate {
                 print("Failed to make facebook graph request")
                 return
             }
+            
+            print(result)
+            
             //데이터 가져오기
             guard let userName = result["name"] as? String,
-                  let email = result["email"] as? String else {
+                  let email = result["email"] as? String,
+                  let picture = result["picture"] as? [String: Any],
+                  let data = picture["data"] as? [String: Any],
+                  let pictureUrl = data["url"] as? String else {
                 print("Faield to get email and name from fb result")
-               return
-           }
-            print("\(result)")
+                return
+            }
+            
 //            //받아온 데이터 ["name": 아무개, "id": 989961108211470, "email": 000000@naver.com]
             //외국인이라면 이코드 사용 나중에 두개를 한꺼번에 구성하는 코드를 짜봐야 할듯함.
 //            let nameComponents = userName.components(separatedBy: " ")
@@ -282,7 +288,40 @@ extension LoginViewController: LoginButtonDelegate {
             //facebook에서 요청한 데이터 성과 이름 이메일로 추출
             DatabaseManager.shared.userExists(with: email, completion: { exists in
                 if !exists {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: userName, lastName: "", emailAddress: email))
+                    let chatUser = ChatAppUser(firstName: userName, lastName: "", emailAddress: email)
+                     
+                    DatabaseManager.shared.insertUser(with: chatUser, complaetion: { success in
+                        if success {
+                            
+                            guard let url = URL(string: pictureUrl) else {
+                                return
+                            }
+                            
+                            print("Downloading data from facebook image")
+                            
+                            URLSession.shared.dataTask(with: url, completionHandler: { data, _, _ in
+                                guard let data = data else {
+                                    print("Failed to get data from facebook")
+                                    return
+                                }
+                                print("get data feom facebook, uploading...")
+                                //upload image
+                                let fileName = chatUser.profilePictureFileName
+                                StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName, completion: { result in
+                                    //결과에 실패 또는 성공이 있기 때문에 간단히 전환할수 있게 하기위해 스위치문 추가 /성공의 경우 다운로드 Url을 가지게 되고 오류라면 오류를 출력 할것입니다. 다운로드 하면 업로드 하고 다운로드 URL을 다시 제공하여 캐시에 저장 하겠습니다
+                                    switch result {
+                                    case .success(let downloadUrl):
+                                        UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                        print(downloadUrl)
+                                    case .failure(let error):
+                                        print("Storage manager error: \(error)")
+                                    }
+
+                                })
+                            })
+                            
+                        }
+                    })
                 }
             })
             

@@ -37,12 +37,20 @@ extension DatabaseManager {
     
     
     ///Inserts new user to database
-    public func insertUser(with user: ChatAppUser) {
+    //삽입된 사용자 함수에 완료 블록을 추가하고 완료 되면 호출자에게 알릴 것이고 데이터베이스에 쓰기가 완료되면 그렇게 할 것 입니다. 그런다음 이미지를 업로드 하고 싶으므로 기능을 추가할 것입니다.
+    public func insertUser(with user: ChatAppUser, complaetion: @escaping (Bool) -> Void) {
         //사용자를 구분하는 고유한 사항이 이메일이기떄문에 따로 추가할필요는 없습니다.따라서 동일한 주소를 가진 사용자는 사용자가 될수 없는 것입니다.
         database.child(user.safeEmail).setValue([
             "first_name": user.firstName,
             "last_name": user.lastName
-        ])
+        ], withCompletionBlock: { error, _ in
+            guard error == nil else {
+                print("failed out write to database")
+                complaetion(false)
+                return
+            }
+            complaetion(true)
+        })
     }
 }
 
@@ -56,5 +64,10 @@ struct ChatAppUser {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
+    }
+    //사진 파일 이름
+    var profilePictureFileName: String {
+       //images/jdr4343-naver-com_Profile_Picture.png 기본적으로 유형을 이런식으로 만들고 싶습니다.
+        return "\(safeEmail)_Profile_picture.png"
     }
 }
