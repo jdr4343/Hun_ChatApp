@@ -23,6 +23,7 @@
 		405559D626B4AA2500C037C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 405559D426B4AA2500C037C7 /* Main.storyboard */; };
 		405559D826B4AA2700C037C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 405559D726B4AA2700C037C7 /* Assets.xcassets */; };
 		405559DB26B4AA2700C037C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 405559D926B4AA2700C037C7 /* LaunchScreen.storyboard */; };
+		40612F9C26BCA3C600E10BE8 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40612F9B26BCA3C600E10BE8 /* StorageManager.swift */; };
 		40840A2626BC5B81000704EA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40840A2526BC5B81000704EA /* ChatViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		405559D726B4AA2700C037C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		405559DA26B4AA2700C037C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		405559DC26B4AA2700C037C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		40612F9B26BCA3C600E10BE8 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		40840A2526BC5B81000704EA /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		409742FD26BAF54F00C74610 /* Hun_ChatApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hun_ChatApp.entitlements; sourceTree = "<group>"; };
 		6AC1F63B19C58CDAE48D3808 /* Pods-Hun_ChatApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hun_ChatApp.release.xcconfig"; path = "Target Support Files/Pods-Hun_ChatApp/Pods-Hun_ChatApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				405559D026B4AA2500C037C7 /* SceneDelegate.swift */,
 				400E73E426B4CB0D00533321 /* FrameExtensions.swift */,
 				4042BA4226B860DF002A9110 /* DatabaseManager.swift */,
+				40612F9B26BCA3C600E10BE8 /* StorageManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				405559D126B4AA2500C037C7 /* SceneDelegate.swift in Sources */,
 				40840A2626BC5B81000704EA /* ChatViewController.swift in Sources */,
 				400E73DC26B4AF5B00533321 /* PhotoViewerViewController.swift in Sources */,
+				40612F9C26BCA3C600E10BE8 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
