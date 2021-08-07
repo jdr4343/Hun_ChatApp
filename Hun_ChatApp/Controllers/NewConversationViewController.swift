@@ -10,6 +10,9 @@ import JGProgressHUD
 //사용자가 새 대화를 생성할수 있는 화면
 //채팅하고 싶은 다른 사용자를 검색하고 해당 사용자 존재하는 확인 할수 있습니다.
 class NewConversationViewController: UIViewController {
+    
+    public var completion: (([String: String]) -> (Void))?
+    
     //Firebase를 다시 사용하면 비용이 많이 들고 긴로딩 때문에 배열을 생성하고 그배열은 사용자 개체를 가지고 있을것 입니다.
     //처음 결과를 가져올 위치
     private var users = [[String: String]]()
@@ -102,7 +105,12 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        //start conversation
+        //start conversation / 여기서 수행할 작업은 해당 결과를 가져오는 것입니다
+        let targetUserData = results[indexPath.row]
+        //새로운 대화 검색을 위해 컨트롤러를 해제
+        dismiss(animated: true, completion: { [weak self] in
+            self?.completion?(targetUserData)
+        })
     }
     
 }

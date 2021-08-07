@@ -70,10 +70,29 @@ class ConversationsViewController: UIViewController {
     @objc private func didTapComposeButton() {
             //사용자가 새 대화를 생성할수 있는 화면 NewConversationViewController로 연결합니다. 바버튼을 누르면 사용자는 새 대화를 생성할것 입니다.
         let vc = NewConversationViewController()
+        //새로운 대화 라고 가정
+        vc.completion = { [weak self] result in
+            print("\(result)")
+            self?.creatNewConversation(result: result)
+        }
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
-    
+    //새 대화를 생성하고 위의 결과를 보내서 이결과의 유형을 지정 하겠습니다.
+    private func creatNewConversation(result: [String: String]) {
+        //이름과 이메일 키를 언래핑 하겠습니다.아래의 코드는 새 대화를 시작하기 위한 최소 요구사항입니다.이것이 필요한 이유는 이메일이 데이터베이스에서 사용되기 떄문입니다.
+        guard let name = result["name"], let email = result["email"] else {
+            return
+        }
+        let vc = ChatViewController(with: email)
+        //새로운 대화에 참을 전하겠습니다
+        vc.isNewConversation = true
+        
+        //사용자를 식별하기 위해 이름으로 지정
+        vc.title = "name"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     
     
@@ -122,7 +141,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //채팅 화면과 연결
-        let vc = ChatViewController()
+        let vc = ChatViewController(with: "jsdfas@gmail.com")
         //임의 항목
         vc.title = "Jenny Smith"
         vc.navigationItem.largeTitleDisplayMode = .never
