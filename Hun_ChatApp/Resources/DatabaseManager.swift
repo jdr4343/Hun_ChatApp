@@ -157,10 +157,11 @@ extension DatabaseManager {
             case .custom(_):
                 break
             }
-            
             //firstMessage Id 도 대화 ID에 포함되도록 대화 접두사를 사용
+            let conversationId = "conversation_\(firstMessage.messageId)"
+           
             let newConversationData: [String: Any] = [
-                "id": "conversation_\(firstMessage.messageId)",
+                "id": conversationId,
                 "other_user_email": otherUserEmail,
                 "lastest_message": [
                     "date":dateString,
@@ -174,22 +175,108 @@ extension DatabaseManager {
             if var conversations = userNode["conversations"] as? [[String: Any]] {
                 // 현재사용자에 대한 대화 배열이 존재합니다.
                 conversations.append(newConversationData)
-            } else {
-                //현재 사용자에대한 배열이 존재 하지 않습니다. 추가합니다.
-                userNode["conversations"] = [
-                newConversationData
-                ]
-                ref.setValue(userNode, withCompletionBlock: { error, _ in
+                userNode["conversations"] = conversations
+                ref.setValue(userNode, withCompletionBlock: { [weak self] error, _ in
                     guard error == nil else {
                         completion(false)
                         return
                     }
-                    completion(true)
+                    self?.finishCreatingConversation(conversationID: conversationId,
+                                                    firstMessage: firstMessage,
+                                                    completion: completion)
+                })
+            } else {
+                //현재 사용자에대한 배열이 존재 하지 않습니다. 추가합니다.
+                userNode["conversations"] = [
+                    newConversationData
+                ]
+                ref.setValue(userNode, withCompletionBlock: { [weak self] error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    self?.finishCreatingConversation(conversationID: conversationId,
+                                                    firstMessage: firstMessage,
+                                                    completion: completion)
                 })
             }
             
         })
     }
+    //또 다른 대화 노드
+    private func finishCreatingConversation(conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+//
+//        "id": String
+//        "type": text, photo, video
+//        "context": String
+//        "date": Date()
+//        "sender_email": String
+        //        "isRead": true/false
+        
+        //Date날짜 문자열로 변경
+        let messageDate = firstMessage.sentDate
+        let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+        
+        //문자 메시지 가져오기
+        var message = ""
+        switch firstMessage.kind {
+        
+        case .text(let messageText):
+            message = messageText
+        case .attributedText(_):
+            break
+        case .photo(_):
+            break
+        case .video(_):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        case .linkPreview(_):
+            break
+        case .custom(_):
+            break
+        }
+        
+        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+            completion(false)
+            return
+        }
+        
+        let collectionMessage: [String:Any] = [
+            "id": firstMessage.messageId,
+            "type": firstMessage.kind.messageKindString,
+            "context": message,
+            "date": dateString,
+            "sender_email": currentUserEmail,
+            "isRead": false
+        ]
+        
+        let value: [String: Any] = [
+            "messages":
+                collectionMessage
+        ]
+        
+        
+        
+        
+        //child Node
+        database.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
+            guard error == nil else {
+                completion(false)
+                return
+            }
+            completion(true)
+        })
+    }
+    
+    
+    
     ///전달된 메일이 있는 사용자의 모든 대화를 가져와서 리턴합니다.
     public func getAllConversations(for email: String, completion: @escaping (Result<String, Error>) -> Void) {
         
