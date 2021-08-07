@@ -27,6 +27,16 @@ import InputBarAccessoryView
     
 
 class ChatViewController: MessagesViewController {
+    
+    //날짜 포맷터 추가
+    public static let dateFormatter: DateFormatter = {
+       let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .long
+        formatter.locale = .current
+        return formatter
+    }()
+    
     //새로운 대화인지 나타내는 속성 추가
     public var isNewConversation = false
     //채팅 하고 있는 사용자 속성을 상수로 만들겠습니다. 그리고 이메일을 전달해야하는 생성자를 만들 것 입니다.
@@ -34,19 +44,19 @@ class ChatViewController: MessagesViewController {
     
     //Messages 배열 생성
     private var messages = [Message]()
-    //Messages Test용 보낸사람 만들기
-    private let selfSender: Sender? {
+    
+    private var selfSender: Sender? {
         //이메일이 존재하지 않는 경우 이것은 보낸 사람 선택 사항이 될 것입니다. 캐시 및 사용자 기본값에서 보낸사람을 반환하지 않습니다.
-        guard let email = UserDefaults.standard.value(forKey: "email") else {
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
             return nil
         }
-    Sender(PhotoURL: "",
-    senderId: email,
-    displayName: "Joe Smith")
+        return Sender(PhotoURL: "",
+                      senderId: email,
+                      displayName: "Joe Smith")
     }
     
     //이메일을 전달해야하는 생성자를 재정의 하겠습니다.
-     init(with email: String) {
+    init(with email: String) {
         self.otherUserEmail = email
         super.init(nibName: nil, bundle: nil)
     }
@@ -95,7 +105,13 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                                   messageId: messageId,
                                   sentDate: Date(),
                                   kind: .text(text))
-            DatabaseManager.shared.createNewConversation(with: otherUserEmail, firstMessage: <#T##Message#>, completion: <#T##(Bool) -> Void#>)
+            DatabaseManager.shared.createNewConversation(with: otherUserEmail, firstMessage: message, completion: { sucess in
+                if sucess {
+                    print("message sent")
+                } else {
+                    print("failed to send")
+                }
+            })
         } else {
             //새 대화가 아니라면 기존 대화 데이터를 추가 하겠습니다.
         }
@@ -106,11 +122,13 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     //메시지 ID 생성 / 무작위 문자열이어야 합니다.
     private func createMessageId() -> String? {
         //date, otherUserEmail, senderEmail, randomInt / 기본적으로 현재 사용자 이메일이 아닌 경우에는 nil 반환
+        
         guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") else {
             return nil
         }
-        let newIdentifier = "\(otherUserEmail)_\(currentUserEmail)"
-        
+        let dateString = Self.dateFormatter.string(from: Date())
+        let newIdentifier = "\(otherUserEmail)_\(currentUserEmail)_\(dateString)"
+        print("createdd message id \(newIdentifier)")
         return newIdentifier
     }
 }
@@ -119,7 +137,6 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
     //첫번째 함수는 기본적으로 발신자가 누군지 알고 싶어합니다.이 기능은 프레임워크가 채팅 풍선을 보낸 것처럼 오른쪽에 표시 한거나 받은 것처럼 왼쪽에 채팅 풍선을 표시 하도록 합니다
     func currentSender() -> SenderType {
         //발신자가 nil인 경우 더미 샌더를 리턴하여 좀더 타입세이프티하게 만들겠습니다.
-        func currentSender() -> SenderType {
             if let sender = selfSender {
                 return sender
             }
@@ -127,7 +144,7 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
             fatalError("Self Sender is nil, email shoukd be cached")
         return Sender(PhotoURL: "", senderId: "77", displayName: "")
         }
-    }
+    
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
