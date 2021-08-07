@@ -13,16 +13,16 @@ import InputBarAccessoryView
 //두개의 구조체를 생성하고 그 중 하나는 메시지를 나타내고 다른 하나는 발신자를 나타내겠습니다.
     //MessageType을 상속하고 fix를 누릅니다.그러면 순서대로 보낸사람,식별자,보낸날짜,종류가 기입됩니다.
     struct Message: MessageType {
-        var sender: SenderType
-        var messageId: String
-        var sentDate: Date
-        var kind: MessageKind
+        public var sender: SenderType
+        public var messageId: String
+        public var sentDate: Date
+        public var kind: MessageKind
     }
     //똑같이 fix를 눌러주면 발신자 ID와 보여지는 이름이 만들어집니다. 하지만 사진을 갖도록 확장하고 싶음으로 PhotoURL을 추가하겠습니다.
     struct Sender: SenderType {
-        var PhotoURL: String
-        var senderId: String
-        var displayName: String
+        public var PhotoURL: String
+        public var senderId: String
+        public var displayName: String
     }
     
 

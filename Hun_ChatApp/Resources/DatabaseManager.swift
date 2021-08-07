@@ -114,7 +114,81 @@ extension DatabaseManager {
 extension DatabaseManager {
     ///사용자 이메일과 첫 메시지가 새 대화를 생성하고 첫번째 메시지가 전송됩니다
     public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
-        
+        //사용자 이메일이 다른 사용자를 나타내도록 완료 핸들러 추가하고 현재 캐시에 이메일이 있는지 확인
+        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+            return
+        }
+        //데이터베이스 관리자에서 기억할 수 있는 안전한 이메일을 받기
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
+        //현재 사용자 루트 노드에서 자식 노드에게 안전한 이메일을 전달받고 값을 관찰하고 사용자가 없다면 문제발생을 알립니다.
+        let ref = database.child("\(safeEmail)")
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            guard var userNode = snapshot.value as? [String: Any] else {
+                completion(false)
+                print("user not found")
+                return
+            }
+            //Date날짜 문자열로 변경
+            let messageDate = firstMessage.sentDate
+            let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+            
+            //문자 메시지 가져오기
+            var message = ""
+            switch firstMessage.kind {
+            
+            case .text(let messageText):
+                message = messageText
+            case .attributedText(_):
+                break
+            case .photo(_):
+                break
+            case .video(_):
+                break
+            case .location(_):
+                break
+            case .emoji(_):
+                break
+            case .audio(_):
+                break
+            case .contact(_):
+                break
+            case .linkPreview(_):
+                break
+            case .custom(_):
+                break
+            }
+            
+            //firstMessage Id 도 대화 ID에 포함되도록 대화 접두사를 사용
+            let newConversationData: [String: Any] = [
+                "id": "conversation_\(firstMessage.messageId)",
+                "other_user_email": otherUserEmail,
+                "lastest_message": [
+                    "date":dateString,
+                    "message": message,
+                    "is_read": false
+                ]
+                
+            ]
+            
+            //사용자를 찾는다면 dictionary를 반환합니다.
+            if var conversations = userNode["conversations"] as? [[String: Any]] {
+                // 현재사용자에 대한 대화 배열이 존재합니다.
+                conversations.append(newConversationData)
+            } else {
+                //현재 사용자에대한 배열이 존재 하지 않습니다. 추가합니다.
+                userNode["conversations"] = [
+                newConversationData
+                ]
+                ref.setValue(userNode, withCompletionBlock: { error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                })
+            }
+            
+        })
     }
     ///전달된 메일이 있는 사용자의 모든 대화를 가져와서 리턴합니다.
     public func getAllConversations(for email: String, completion: @escaping (Result<String, Error>) -> Void) {
