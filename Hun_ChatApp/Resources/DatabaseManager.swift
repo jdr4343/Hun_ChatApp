@@ -94,7 +94,23 @@ extension DatabaseManager {
             
         })
     }
+    //검색 기능 구현
+    public func getAllUser(completion: @escaping(Result<[[String: String]], Error>) -> Void) {
+        database.child("users").observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: String]] else {
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            completion(.success(value))
+        })
+    }
+    //오류 정의
+    public enum DatabaseError: Error {
+        case failedToFetch
+    }
 }
+
+
 
 //삽입하려는 모든 값을 래핑하는 구조체 / 이메일 주소로 지정하면 비밀번호를 저장할 필요가 없습니다.그리고 암호화 되지 않은 상태로 저장하는 연습하지 않을것이므로 비밀번호는 생략하겠습니다.
 struct ChatAppUser {
