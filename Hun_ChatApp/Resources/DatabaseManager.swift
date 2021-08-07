@@ -110,13 +110,25 @@ extension DatabaseManager {
     }
 }
 // MARK: - Sending messages / conversations
-//첫번째 기능은 새 대화를 삽입하는 기능이고 두번쨰 기능은 현재 사용자에 대한 대화 목록을 채우는 것입니다.세번째 기능은 주어진 모든 대화를 리턴 할것입니다.이 모든 것이 정리될수 있도록 아래에 확장자를 추가 하겠습니다.
+//첫번째 기능은 새 대화를 삽입하는 기능이고 두번쨰 기능은 현재 사용자에 대한 모든대화 목록을 가져오는 것입니다.세번째 기능은 주어진 모든 대화를 리턴 할것입니다.이 모든 것이 정리될수 있도록 아래의 확장자를 추가 하겠습니다.
 extension DatabaseManager {
-    //사용자 이메일과 첫 메시지가 새대화를 생성하고 첫번째 메시지가 전송됩니다
+    ///사용자 이메일과 첫 메시지가 새 대화를 생성하고 첫번째 메시지가 전송됩니다
+    public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+        
+    }
+    ///전달된 메일이 있는 사용자의 모든 대화를 가져와서 리턴합니다.
+    public func getAllConversations(for email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        
+    }
     
-    
-    
-    
+    ///주어진 대화에 대한 모든 메시지를 가져옵니다
+    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<String, Error>) -> Void) {
+        
+    }
+    ///대상(사진이나 동영상) 대화와 함께 메시지 보내기
+    public func sendMessage(to conversation: String, message: Message, complation: @escaping (Bool) -> Void) {
+        
+    }
 }
 
 
