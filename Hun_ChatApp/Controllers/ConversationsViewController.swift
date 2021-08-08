@@ -9,20 +9,32 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
-
+//노드를 토대로 구조체 2개 생성
+struct Conversation {
+    let id: String
+    let name: String
+    let otherUserEmail: String
+    let latestMessage: LatestMessage
+}
+struct LatestMessage {
+    let date: String
+    let text: String
+    let isRead: Bool
+}
 
 class ConversationsViewController: UIViewController {
     
     //스피너 인스턴스 생성
     private let spinnet = JGProgressHUD(style: .dark)
     
+    private var conversations = [Conversation]()
     //대화 목록 구현
     //테이블 숨김 설정 대화가 있는 경우 테이블 보기를 표시하고 그렇지 않으면 숨겨두겠습니다.
     private let tableView: UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.register(UITableViewCell.self,
-                       forCellReuseIdentifier: "cell")
+        table.register(ConversationTableViewCell.self,
+                       forCellReuseIdentifier: ConversationTableViewCell.identifier)
         return table
     }()
     //대화가 없을떄 테이블뷰를 숨기고 보여줄 textLabel
@@ -49,10 +61,31 @@ class ConversationsViewController: UIViewController {
         view.addSubview(noConversationsLabel)
         setupTableView()
         fetchConversations()
-        
+        startListeningForConversations()
         
         
     }
+    //데이터베이스의 해당 배열에 리스너를 연결하는 함수 / 새 대화가 추가될 때마다 테이블을 업데이트 하게 됩니다.
+    private func startListeningForConversations() {
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
+            return
+        }
+        //데이터베이스가 안전한 이메일을 가지고 있는지 확인
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        
+        DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
+            switch result {
+            case .success(let conversations):
+                guard !conversations.isEmpty else {
+                    return
+                }
+                self?.conversations = conversations
+            case .failure(let error):
+                print("falid to get convos: \(error)")
+            }
+        })
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds

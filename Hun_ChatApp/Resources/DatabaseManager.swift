@@ -281,12 +281,38 @@ extension DatabaseManager {
     
     
     ///전달된 메일이 있는 사용자의 모든 대화를 가져와서 리턴합니다.
-    public func getAllConversations(for email: String, completion: @escaping (Result<String, Error>) -> Void) {
-        
+    public func getAllConversations(for email: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
+        database.child("\(email)/conversations").observe(.value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: Any]] else {
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            //값을 압축하기 보다는 평면 매핑 하고 그 안에 있는 사전을 모델로 변환하여 dictionary(노드)에 대한 유효성 검사를 매핑 하겠습니다.
+            let conversations: [Conversation] = value.compactMap({ dictionary in
+                guard let conversationId = dictionary["id"] as? String,
+                      let name = dictionary["name"] as? String,
+                      let otherUserEmail = dictionary["other_user_email"] as? String,
+                      let latestMessage = dictionary["latest_message"] as? [String: Any],
+                      let date = latestMessage["date"] as? String,
+                      let message = latestMessage["message"] as? String,
+                      let isRead = latestMessage["is_read"] as? Bool else {
+                    return nil
+                }
+                //모델을 생성하고 반환 하겠습니다.n
+                let latestMessageObject = LatestMessage(date: date, 
+                                                        text: message,
+                                                        isRead: isRead)
+                return Conversation(id: conversationId,
+                                    name: name,
+                                    otherUserEmail: otherUserEmail,
+                                    latestMessage: latestMessageObject)
+            })
+            
+        })
     }
     
     ///주어진 대화에 대한 모든 메시지를 가져옵니다
-    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<String, Error>) -> Void) {
+    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[String], Error>) -> Void) {
         
     }
     ///대상(사진이나 동영상) 대화와 함께 메시지 보내기
