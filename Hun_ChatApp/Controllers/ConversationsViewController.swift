@@ -89,7 +89,7 @@ class ConversationsViewController: UIViewController {
         vc.isNewConversation = true
         
         //사용자를 식별하기 위해 이름으로 지정
-        vc.title = "name"
+        vc.title = name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }

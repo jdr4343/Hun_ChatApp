@@ -113,7 +113,7 @@ extension DatabaseManager {
 //첫번째 기능은 새 대화를 삽입하는 기능이고 두번쨰 기능은 현재 사용자에 대한 모든대화 목록을 가져오는 것입니다.세번째 기능은 주어진 모든 대화를 리턴 할것입니다.이 모든 것이 정리될수 있도록 아래의 확장자를 추가 하겠습니다.
 extension DatabaseManager {
     ///사용자 이메일과 첫 메시지가 새 대화를 생성하고 첫번째 메시지가 전송됩니다
-    public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         //사용자 이메일이 다른 사용자를 나타내도록 완료 핸들러 추가하고 현재 캐시에 이메일이 있는지 확인
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return
@@ -163,6 +163,7 @@ extension DatabaseManager {
             let newConversationData: [String: Any] = [
                 "id": conversationId,
                 "other_user_email": otherUserEmail,
+                "name": name,
                 "lastest_message": [
                     "date":dateString,
                     "message": message,
@@ -181,7 +182,7 @@ extension DatabaseManager {
                         completion(false)
                         return
                     }
-                    self?.finishCreatingConversation(conversationID: conversationId,
+                    self?.finishCreatingConversation(conversationID: conversationId, name: name,
                                                     firstMessage: firstMessage,
                                                     completion: completion)
                 })
@@ -195,7 +196,7 @@ extension DatabaseManager {
                         completion(false)
                         return
                     }
-                    self?.finishCreatingConversation(conversationID: conversationId,
+                    self?.finishCreatingConversation(conversationID: conversationId, name: name,
                                                     firstMessage: firstMessage,
                                                     completion: completion)
                 })
@@ -204,7 +205,7 @@ extension DatabaseManager {
         })
     }
     //또 다른 대화 노드
-    private func finishCreatingConversation(conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    private func finishCreatingConversation(conversationID: String,name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
 //
 //        "id": String
 //        "type": text, photo, video
@@ -255,7 +256,8 @@ extension DatabaseManager {
             "context": message,
             "date": dateString,
             "sender_email": currentUserEmail,
-            "isRead": false
+            "isRead": false,
+            "name": name
         ]
         
         let value: [String: Any] = [
