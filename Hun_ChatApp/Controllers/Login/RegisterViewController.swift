@@ -270,7 +270,7 @@ class RegisterViewController: UIViewController {
                             //결과에 실패 또는 성공이 있기 때문에 간단히 전환할수 있게 하기위해 스위치문 추가 /성공의 경우 다운로드 Url을 가지게 되고 오류라면 오류를 출력 할것입니다. 다운로드 하면 업로드 하고 다운로드 URL을 다시 제공하여 캐시에 저장 하겠습니다
                             switch result {
                             case .success(let downloadUrl):
-                                UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                UserDefaults.standard.set(downloadUrl, forKey: "Profile_picture_url")
                                 print(downloadUrl)
                             case .failure(let error):
                                 print("Storage manager error: \(error)")

@@ -70,16 +70,23 @@ class ConversationsViewController: UIViewController {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
+        print("starting Conversation fetch...")
         //데이터베이스가 안전한 이메일을 가지고 있는지 확인
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
         
         DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
             switch result {
             case .success(let conversations):
+                print("successfully got conversation models")
                 guard !conversations.isEmpty else {
                     return
                 }
                 self?.conversations = conversations
+                //새로운 대화를 할당 한 후 테이블 뷰에서 데이터를 메인스레드에서 다시 로드 하겠습니다.
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+                
             case .failure(let error):
                 print("falid to get convos: \(error)")
             }
@@ -159,25 +166,30 @@ class ConversationsViewController: UIViewController {
 //delegate, datasource 확장
 extension ConversationsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return conversations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Hello world "
-        //대화를 위한 이셀에 액세서리 유형을 설정하겠습니다. 셀 오른쪽에 표시되는 화살표입니다.
-        cell.accessoryType = .disclosureIndicator
+        let model = conversations[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationTableViewCell.identifier,
+                                                 for: indexPath) as! ConversationTableViewCell
+        cell.configure(with: model)
         return cell
     }
     
    //사용자가 이러한 셀 중 하나를 탭할 때 해당 채팅 화면을 스택으로 푸시하는 코드 작성
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let model = conversations[indexPath.row]
         //채팅 화면과 연결
-        let vc = ChatViewController(with: "jsdfas@gmail.com")
+        let vc = ChatViewController(with: model.otherUserEmail)
         //임의 항목
-        vc.title = "Jenny Smith"
+        vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
+    }
+    //인덱스 경로의 행 높이를 구현하고 120을 반환 합니다.이미지가 100의 높이를 가지고 있으므로 아래쪽과 위쪽 모두 10포인트의 버퍼가 필요하기 때문입니다.
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 }

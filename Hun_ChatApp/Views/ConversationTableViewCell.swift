@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ConversationTableViewCell: UITableViewCell {
     //셀에 등록할 식별자 부여
@@ -15,7 +16,7 @@ class ConversationTableViewCell: UITableViewCell {
     //첫번째는 사용자 이미지 입니다
     private let userImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 50
         imageView.layer.masksToBounds = true
         return imageView
@@ -53,22 +54,30 @@ class ConversationTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        userImageView.frame = CGRect(x: 10,
-                                     y: 10,
-                                     width: 100,
-                                     height: 100)
-        userNameLabel.frame = CGRect(x: userImageView.right + 10,
-                                     y: 10,
-                                     width: contentView.width - 20 - userImageView.width,
-                                     height: (contentView.height-20)/2)
-        userMessageLabel.frame = CGRect(x: userImageView.right + 10,
-                                        y: userNameLabel.bottom + 10,
-                                     width: contentView.width - 20 - userImageView.width,
-                                     height: (contentView.height-20)/2)
+        userImageView.frame = CGRect(x: 8, y: 8, width: 80, height: 80)
+        
+        userNameLabel.frame = CGRect(x: userImageView.right+30, y: 8, width: contentView.width - 20 - userImageView.width, height: (contentView.height-20)/2)
+        userMessageLabel.frame = CGRect(x: userImageView.right+30, y: userNameLabel.bottom+10, width: contentView.width - 20 - userImageView.width, height: (contentView.height-20)/2)
+        
     }
     
+    
+    
     //아래의 코드는 모델과 함께 호출 할 것입니다.
-    public func configure(with model: String) {
-        
+    public func configure(with model: Conversation) {
+        self.userMessageLabel.text = model.latestMessage.text
+        self.userNameLabel.text = model.name
+        //SDWebImage구현 기본적으로 이미지의 저장소 경로의 캐싱을 처리함
+        let path = "images/\(model.otherUserEmail)_Profile_picture.png"
+        StorageManager.shared.downloadURL(for: path, completion: { [weak self] result in
+            switch result {
+            case .success(let url):
+                DispatchQueue.main.async {
+                    self?.userImageView.sd_setImage(with: url, completed: nil)
+                }
+            case .failure(let error):
+                print("failed to get image url:\(error)")
+            }
+        })
     }
 }

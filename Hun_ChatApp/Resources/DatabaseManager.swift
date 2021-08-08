@@ -164,7 +164,7 @@ extension DatabaseManager {
                 "id": conversationId,
                 "other_user_email": otherUserEmail,
                 "name": name,
-                "lastest_message": [
+                "latest_message": [
                     "date":dateString,
                     "message": message,
                     "is_read": false
@@ -299,7 +299,7 @@ extension DatabaseManager {
                     return nil
                 }
                 //모델을 생성하고 반환 하겠습니다.n
-                let latestMessageObject = LatestMessage(date: date, 
+                let latestMessageObject = LatestMessage(date: date,
                                                         text: message,
                                                         isRead: isRead)
                 return Conversation(id: conversationId,
@@ -307,7 +307,7 @@ extension DatabaseManager {
                                     otherUserEmail: otherUserEmail,
                                     latestMessage: latestMessageObject)
             })
-            
+            completion(.success(conversations))
         })
     }
     
