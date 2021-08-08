@@ -243,10 +243,11 @@ extension DatabaseManager {
             break
         }
         
-        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+        guard let myEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             completion(false)
             return
         }
+        let currentUserEmail = DatabaseManager .safeEmail(emailAddress: myEmail)
         
         let collectionMessage: [String:Any] = [
             "id": firstMessage.messageId,
