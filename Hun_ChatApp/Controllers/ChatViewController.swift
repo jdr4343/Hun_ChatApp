@@ -90,6 +90,9 @@ class ChatViewController: MessagesViewController {
         self.conversationId = id
         self.otherUserEmail = email
         super.init(nibName: nil, bundle: nil)
+        if let conversationId = conversationId {
+            listenForMessages(id: conversationId)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -108,13 +111,27 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-        listenForMessages()
+       
 
     }
     
     //ConversationView에서 만들었던 startListeningForConversations 함수와 비슷한 함수를 ChatView에서도 만들어줍니다.
-    private func listenForMessages() {
-        
+    private func listenForMessages(id: String) {
+        DatabaseManager.shared.getAllMessagesForConversation(with: id, completion: { [weak self] result in
+            switch result {
+            case .success(let messages):
+                guard !messages.isEmpty else {
+                    return
+                }
+                self?.messages = messages
+                DispatchQueue.main.async {
+                    self?.messagesCollectionView.reloadDataAndKeepOffset()
+                }
+                
+            case .failure(let error):
+                print("failed to get messages: \(error)")
+            }
+        })
     }
     
     
@@ -187,7 +204,7 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
             }
             //더미 샌더
             fatalError("Self Sender is nil, email shoukd be cached")
-        return Sender(PhotoURL: "", senderId: "77", displayName: "")
+        
         }
     
     

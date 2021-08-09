@@ -253,7 +253,7 @@ extension DatabaseManager {
         let collectionMessage: [String:Any] = [
             "id": firstMessage.messageId,
             "type": firstMessage.kind.messageKindString,
-            "context": message,
+            "content": message,
             "date": dateString,
             "sender_email": currentUserEmail,
             "isRead": false,
@@ -312,8 +312,31 @@ extension DatabaseManager {
     }
     
     ///주어진 대화에 대한 모든 메시지를 가져옵니다
-    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[String], Error>) -> Void) {
-        
+    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
+        database.child("\(id)/messages").observe(.value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: Any]] else {
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            //값을 압축하기 보다는 평면 매핑 하고 그 안에 있는 사전을 모델로 변환하여 dictionary(노드)에 대한 유효성 검사를 매핑 하겠습니다.
+            let messages: [Message] = value.compactMap({ dictionary in
+                guard let name = dictionary["name"] as? String,
+                      let isRead = dictionary["is_read"] as? Bool,
+                      let messageID = dictionary["id"] as? String,
+                      let content = dictionary["content"] as? String,
+                      let senderEmail = dictionary["sender_email"] as? String,
+                      let type = dictionary["type"] as? String,
+                      let dateString = dictionary["date"] as? String,
+                      let date = ChatViewController.dateFormatter.date(from: dateString) else {
+                    return nil
+                }
+                let sender = Sender(PhotoURL: "", senderId: senderEmail, displayName: name)
+                
+                
+                return Message(sender: sender, messageId: messageID, sentDate: date, kind: .text(content))
+            })
+            completion(.success(messages))
+        })
     }
     ///대상(사진이나 동영상) 대화와 함께 메시지 보내기
     public func sendMessage(to conversation: String, message: Message, complation: @escaping (Bool) -> Void) {
