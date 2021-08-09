@@ -25,13 +25,13 @@ class ConversationTableViewCell: UITableViewCell {
     //두번쨰는 이름라벨 입니다.
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 21, weight: .semibold)
+        label.font = .systemFont(ofSize: 19, weight: .semibold)
         return label
     }()
     //세번쨰는 채팅라벨 입니다.
     private let userMessageLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 19, weight: .regular)
+        label.font = .systemFont(ofSize: 17, weight: .regular)
         label.numberOfLines = 0
         return label
     }()
@@ -50,16 +50,24 @@ class ConversationTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
     //두번째는 layoutSubviews를 재정의 하는것 입니다. 이름에서 알 수 있듯이 하위 보기를 배치하는 기능입니다.
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+    
         userImageView.frame = CGRect(x: 8, y: 8, width: 80, height: 80)
-        
-        userNameLabel.frame = CGRect(x: userImageView.right+30, y: 8, width: contentView.width - 20 - userImageView.width, height: (contentView.height-20)/2)
-        userMessageLabel.frame = CGRect(x: userImageView.right+30, y: userNameLabel.bottom+10, width: contentView.width - 20 - userImageView.width, height: (contentView.height-20)/2)
-        
+    
+        userNameLabel.frame = CGRect(x: userImageView.right+30,
+                                     y: 8,
+                                     width: contentView.width - 20 - userImageView.width,
+                                     height: (contentView.height-20)/2)
+        userMessageLabel.frame = CGRect(x: userImageView.right+30,
+                                        y: userNameLabel.bottom+10,
+                                        width: contentView.width - 20 - userImageView.width,
+                                        height: (contentView.height-20)/2)
     }
+    
     
     
     

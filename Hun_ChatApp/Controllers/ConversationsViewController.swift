@@ -124,7 +124,7 @@ class ConversationsViewController: UIViewController {
         guard let name = result["name"], let email = result["email"] else {
             return
         }
-        let vc = ChatViewController(with: email)
+        let vc = ChatViewController(with: email, id: nil)
         //새로운 대화에 참을 전하겠습니다
         vc.isNewConversation = true
         
@@ -182,7 +182,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
         tableView.deselectRow(at: indexPath, animated: true)
         let model = conversations[indexPath.row]
         //채팅 화면과 연결
-        let vc = ChatViewController(with: model.otherUserEmail)
+        let vc = ChatViewController(with: model.otherUserEmail, id: model.id)
         //임의 항목
         vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never

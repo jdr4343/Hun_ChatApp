@@ -67,7 +67,7 @@ class ChatViewController: MessagesViewController {
     public var isNewConversation = false
     //채팅 하고 있는 사용자 속성을 상수로 만들겠습니다. 그리고 이메일을 전달해야하는 생성자를 만들 것 입니다.
     public let otherUserEmail: String
-    
+    private let conversationId: String?
     //Messages 배열 생성
     private var messages = [Message]()
     
@@ -79,10 +79,15 @@ class ChatViewController: MessagesViewController {
         return Sender(PhotoURL: "",
                       senderId: email,
                       displayName: "Joe Smith")
+        
     }
     
+    
+    
+    
     //이메일을 전달해야하는 생성자를 재정의 하겠습니다.
-    init(with email: String) {
+    init(with email: String, id: String?) {
+        self.conversationId = id
         self.otherUserEmail = email
         super.init(nibName: nil, bundle: nil)
     }
@@ -103,15 +108,27 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-        
+        listenForMessages()
 
     }
+    
+    //ConversationView에서 만들었던 startListeningForConversations 함수와 비슷한 함수를 ChatView에서도 만들어줍니다.
+    private func listenForMessages() {
+        
+    }
+    
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         //뷰가 로드 된후 대화 키보드 생성
         messageInputBar.inputTextView.becomeFirstResponder()
     }
 }
+
+
+
+
 //messageInputBarDelegate 확장하고 기능 부여
 extension ChatViewController: InputBarAccessoryViewDelegate {
     //사용자가 공백만 잇는 메시지를 보낼 수 없도록
