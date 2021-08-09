@@ -124,6 +124,7 @@ class ChatViewController: MessagesViewController {
                     return
                 }
                 self?.messages = messages
+                
                 DispatchQueue.main.async {
                     self?.messagesCollectionView.reloadDataAndKeepOffset()
                 }

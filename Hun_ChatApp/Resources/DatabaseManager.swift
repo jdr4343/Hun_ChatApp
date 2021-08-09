@@ -256,7 +256,7 @@ extension DatabaseManager {
             "content": message,
             "date": dateString,
             "sender_email": currentUserEmail,
-            "isRead": false,
+            "is_read": false,
             "name": name
         ]
         
