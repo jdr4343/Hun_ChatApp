@@ -9,12 +9,13 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import JGProgressHUD
-
+import GoogleSignIn
 //로그인 뷰 컨트롤러
 class LoginViewController: UIViewController {
 //스피너
     private let spinner = JGProgressHUD(style: .dark)
-    
+    //구글
+    let signInConfig = GIDConfiguration.init(clientID: "1061507525495-begec81hkf2fbdk2sgs0s2ff71b6e197.apps.googleusercontent.com")
     
     //사용자 인터페이스 요소 추가 / 스크롤 뷰 / 이메일,비밀번호를 적을 두개의 텍스트 필드 / 로그인 버튼
     private let scrollView: UIScrollView = {
@@ -84,9 +85,26 @@ class LoginViewController: UIViewController {
         
         return button
     }()
+    //구글 버튼생성
+    private let googleLoginbutton = GIDSignInButton()
+    //구글 버튼 액션
+   @objc func didTapGoogleButton() {
+        GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
+            guard error == nil else {
+                return
+            }
+            guard let user = user else {
+                return
+            }
+            let emailAdress = user.profile?.email
+        }
+    }
+    
    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         view.backgroundColor = .white
         title = "Log in"
 //사용자가 Resister을 허용하는 버튼 구현 /ResisterViewController로 넘어가게 됨
@@ -115,6 +133,9 @@ class LoginViewController: UIViewController {
         //loginButton.center = view.center
         scrollView.addSubview(facebookLoginButton)
 
+        scrollView.addSubview(googleLoginbutton)
+        
+        googleLoginbutton.addTarget(self, action: #selector(didTapGoogleButton), for: .touchUpInside)
         
     }
     //상위, 하위 LayoutSubview를 재정의 하고 뷰를 호출 / 이미지 뷰를 위한 프레임을 중앙의 정사각형으로 구현 하겠습니다
@@ -147,7 +168,12 @@ class LoginViewController: UIViewController {
                                            y: loginButton.bottom+10,
                                            width: scrollView.width-60,
                                            height: 52)
-        facebookLoginButton.frame.origin.y = loginButton.bottom+10
+        
+        
+        googleLoginbutton.frame = CGRect(x: 30,
+                                   y: facebookLoginButton.bottom+10,
+                                   width: scrollView.width-60,
+                                   height: 52)
     }
     
     

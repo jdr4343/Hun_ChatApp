@@ -11,15 +11,25 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
+import GoogleSignIn
 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
     
-    func application(
-        _ application: UIApplication,
+    func application(_ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        //Google Sing In
+        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+            if error != nil || user == nil {
+                
+            } else {
+                
+            }
+        }
+        
+        
         //firebase
         FirebaseApp.configure()
         
@@ -27,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        //Google Sing In
- 
+       
+        
         
         
         return true
@@ -39,8 +49,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey : Any] = [:]
     ) -> Bool {
+        var hendlrd: Bool
+        //Google Sing In
+        hendlrd = GIDSignIn.sharedInstance.handle(url)
+        if hendlrd {
+            return true
+        }
 
-        ApplicationDelegate.shared.application(
+        
+        return ApplicationDelegate.shared.application(
             app,
             open: url,
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
