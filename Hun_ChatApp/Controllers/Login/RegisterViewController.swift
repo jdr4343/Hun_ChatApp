@@ -278,9 +278,10 @@ class RegisterViewController: UIViewController {
                             
                         })
                     }
-                    //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
-                    strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                   
                 })
+                //사용자가 Firebase를 이용하여 성공적으로 회원가입을 하고 loginView에서 로그인을 한다면 loginview를 dismiss 하겠습니다 이제 사용자가 로그인 했다는 것을 알고 있기 때문에 더 이상 로그인 화면을 표시하지 않겠습니다. 매번 서명 하는일은 매우 귀찮은 일이니깐요.
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
             })
         })
     }

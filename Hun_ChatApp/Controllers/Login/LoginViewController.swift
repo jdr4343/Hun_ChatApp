@@ -286,8 +286,7 @@ extension LoginViewController: LoginButtonDelegate {
                                                          version: nil,
                                                          httpMethod: .get)
         facebookRequest.start(completion: { _, result, error in
-            guard let result = result as? [String: Any],
-                  error == nil else {
+            guard let result = result as? [String: Any], error == nil else {
                 print("Failed to make facebook graph request")
                 return
             }
